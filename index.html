@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Kathleen's Farm — Guess-and-Check</title>
-<meta name="description" content="Interactive Guess-and-Check practice: allocate 40 farm animals and balance the legs, one careful guess at a time." />
+<meta name="description" content="Interactive Guess-and-Check practice: allocate 20 farm animals and balance the legs." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
@@ -40,68 +40,57 @@ html, body {
   background: var(--pasture);
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.55;
+  /* LARGE FONT BASE */
+  font-size: 32px; 
+  line-height: 1.4;
 }
 
 .page {
-  max-width: 900px;
+  max-width: 1100px; /* Widened slightly to accommodate larger table */
   margin: 0 auto;
   padding: 24px 14px 60px;
 }
 
 /* ---------- header ---------- */
-
-.site-header { text-align: center; padding-bottom: 14px; }
-
+.site-header { text-align: center; padding-bottom: 20px; }
 .brand {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 40px;
+  font-size: 60px;
   margin: 0;
   color: var(--fence-dark);
-  line-height: 1.05;
+  line-height: 1;
 }
-.subtitle { margin: 2px 0 0; color: var(--ink-soft); font-size: 15px; }
+.subtitle { margin: 5px 0 0; color: var(--ink-soft); font-size: 24px; }
 
 /* ---------- problem card ---------- */
-
 .problem-card {
   background: var(--paper);
   border: 1px solid var(--line);
-  border-left: 5px solid var(--amber);
+  border-left: 10px solid var(--amber);
   border-radius: var(--radius);
-  padding: 14px 18px;
+  padding: 20px 24px;
   box-shadow: var(--shadow);
-  margin-bottom: 18px;
+  margin-bottom: 24px;
 }
 .problem-label {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 18px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--amber);
-  margin: 0 0 6px;
+  margin: 0 0 10px;
 }
-.problem-text { margin: 0; font-size: 16.5px; }
+.problem-text { margin: 0; font-size: 32px; font-weight: 500; }
 
 /* ---------- paddock ---------- */
-
 .paddock-section {
   background: var(--pasture-deep);
-  border: 3px solid var(--fence);
-  border-radius: 16px;
-  padding: 12px 12px 10px;
+  border: 4px solid var(--fence);
+  border-radius: 20px;
+  padding: 16px;
   box-shadow: var(--shadow);
   position: relative;
-}
-.paddock-section::before {
-  content: "";
-  position: absolute;
-  inset: 5px;
-  border: 1.5px dashed rgba(124, 104, 76, 0.35);
-  border-radius: 11px;
-  pointer-events: none;
 }
 
 .paddock-toolbar {
@@ -109,262 +98,127 @@ html, body {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 10px;
-  position: relative;
-  z-index: 1;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .live-counts {
   font-family: var(--font-mono);
-  font-size: 14px;
+  font-size: 24px;
   font-weight: 600;
   color: var(--fence-dark);
   background: var(--paper);
-  border: 1px solid var(--line);
+  border: 2px solid var(--line);
   border-radius: 999px;
-  padding: 6px 14px;
+  padding: 8px 20px;
 }
-.live-counts .lc-goat { color: #8a6f42; }
-.live-counts .lc-chicken { color: #b06a28; }
-.live-counts .lc-q { color: var(--ink-soft); }
-
-.toolbar-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .paddock {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 6px;
-  position: relative;
-  z-index: 1;
+  /* 5 COLUMNS PER YOUR REQUEST */
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  max-width: 600px;
+  margin: 0 auto;
 }
-/* visual gap after the 5th column: extra margin on columns 6 */
-.paddock .tile:nth-child(10n + 6) { margin-left: 10px; }
 
 .tile {
   aspect-ratio: 1;
-  min-width: 0;
-  border-radius: 10px;
-  border: 1.5px solid #c9c5ba;
+  border-radius: 12px;
+  border: 2px solid #c9c5ba;
   background: #eceae4;
   padding: 0;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.08s ease, border-color 0.12s ease, background 0.12s ease;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
+  transition: transform 0.1s ease;
 }
-.tile:active { transform: scale(0.93); }
-.tile:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
-.tile svg { width: 100%; height: 100%; display: block; }
+.tile:active { transform: scale(0.9); }
+.tile svg { width: 90%; height: 90%; display: block; }
 
 .tile.is-goat { background: #f3ede2; border-color: #d8cdb8; }
 .tile.is-chicken { background: var(--chicken-cream); border-color: #ecd5c2; }
 
-.paddock-hint {
-  margin: 10px 2px 0;
-  font-size: 13.5px;
-  color: var(--fence-dark);
-  position: relative;
-  z-index: 1;
-}
-.hint-seq { font-family: var(--font-mono); font-size: 12.5px; }
-
-.paddock-error {
-  margin: 8px 2px 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--cross-red);
-  background: var(--cross-red-soft);
-  border-radius: 8px;
-  padding: 8px 12px;
-  position: relative;
-  z-index: 1;
-}
+.paddock-hint { margin: 15px 0 0; font-size: 20px; color: var(--fence-dark); text-align: center; }
 
 /* ---------- table ---------- */
-
-.table-section { margin-top: 20px; }
-
-.table-scroll { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); }
+.table-scroll { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); margin-top: 30px; }
 
 .gnc-table {
   width: 100%;
-  min-width: 720px;
+  min-width: 1000px;
   border-collapse: collapse;
   background: var(--paper);
-  font-size: 14.5px;
 }
 .gnc-table th {
   background: #efe9d8;
   color: var(--ink-soft);
-  font-weight: 600;
-  font-size: 12.5px;
-  padding: 10px 8px;
-  text-align: center;
-  border-bottom: 2px solid var(--line);
-  line-height: 1.3;
+  font-size: 22px; /* 1.5x original approx */
+  padding: 12px 8px;
+  border-bottom: 3px solid var(--line);
 }
-.th-note { display: block; font-family: var(--font-mono); font-size: 11.5px; color: var(--amber); font-weight: 600; }
+.th-note { display: block; font-family: var(--font-mono); font-size: 16px; color: var(--amber); }
 
 .gnc-table td {
   border-bottom: 1px solid var(--line);
-  padding: 7px 6px;
+  padding: 10px 5px;
   text-align: center;
-  vertical-align: middle;
+  font-size: 28px;
 }
 
-.gnc-table tr.locked td {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: var(--ink);
-  background: #fbf8ef;
-}
-.gnc-table tr.locked .cell-tick { color: var(--tick-green); font-weight: 700; font-size: 16px; }
-.gnc-table tr.locked .cell-cross { color: var(--cross-red); font-weight: 700; font-size: 16px; }
+.gnc-table tr.locked td { font-family: var(--font-mono); background: #fbf8ef; }
 
-.gnc-table tr.active td { background: #fffef9; }
-
+/* INPUT STYLING */
 .cell-input {
-  width: 74px;
-  max-width: 100%;
+  width: 90px;
   font-family: var(--font-mono);
-  font-size: 15px;
-  text-align: center;
-  padding: 9px 4px;
+  font-size: 30px; /* LARGE FONT */
+  text-align: center; /* CENTERED PER REQUEST */
+  padding: 8px 0; /* NO HORIZONTAL PADDING */
   border-radius: 8px;
-  border: 1.5px solid var(--line);
-  background: #fff;
+  border: 2px solid var(--line);
 }
-.cell-input:focus-visible { outline: 3px solid var(--amber); outline-offset: 1px; }
-.cell-input.flagged { border-color: var(--cross-red); background: var(--cross-red-soft); }
-
 .cell-select {
-  font-family: var(--font-body);
-  font-size: 14px;
-  padding: 9px 6px;
+  font-size: 22px;
+  padding: 8px 4px;
   border-radius: 8px;
-  border: 1.5px solid var(--line);
-  background: #fff;
+  border: 2px solid var(--line);
 }
-.cell-select:disabled { opacity: 0.45; }
-.cell-select.flagged { border-color: var(--cross-red); background: var(--cross-red-soft); }
 
-.row-controls {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 12px;
-}
+.row-controls { display: flex; justify-content: flex-end; margin-top: 20px; }
 
 /* ---------- buttons ---------- */
-
 .btn {
   font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 15px;
-  padding: 11px 20px;
+  font-weight: 700;
+  font-size: 26px; /* LARGER FONT */
+  padding: 10px 18px; /* REDUCED PADDING TO KEEP SIZE STABLE */
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  transition: transform 0.08s ease, background 0.15s ease;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
 }
-.btn:active { transform: translateY(1px); }
-.btn:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
-.btn:disabled { opacity: 0.45; cursor: not-allowed; }
-
 .btn-primary { background: var(--fence-dark); color: #fff; }
-.btn-primary:hover { background: #665439; }
+.btn-ghost { background: var(--paper); border: 2px solid var(--line); color: var(--ink-soft); }
+.btn-small { font-size: 18px; padding: 6px 12px; }
 
-.btn-ghost {
-  background: var(--paper);
-  border: 1.5px solid var(--line);
-  color: var(--ink-soft);
-}
-.btn-ghost:hover { border-color: var(--fence); color: var(--ink); }
-.btn-small { padding: 8px 13px; font-size: 13.5px; }
-.btn-danger { color: var(--cross-red); }
+/* ---------- feedback & endgame ---------- */
+.feedback-panel { margin-top: 20px; border-radius: var(--radius); padding: 20px; font-size: 26px; }
+.endgame { margin-top: 30px; background: var(--paper); padding: 30px; border: 4px solid var(--amber); border-radius: var(--radius); text-align: center; }
+.endgame-title { font-size: 40px; margin-bottom: 10px; }
+.endgame-input-row input { font-size: 36px; width: 150px; text-align: center; padding: 10px; }
 
-/* ---------- feedback ---------- */
+.celebrate { margin-top: 30px; padding: 40px; text-align: center; border-top: 10px solid var(--tick-green); background: white; }
 
-.feedback-panel {
-  margin-top: 12px;
-  border-radius: var(--radius);
-  padding: 14px 16px;
-  font-size: 14.5px;
-}
-.feedback-panel.good { background: var(--tick-green-soft); border-left: 4px solid var(--tick-green); color: #1e4d33; }
-.feedback-panel.bad { background: var(--cross-red-soft); border-left: 4px solid var(--cross-red); color: #7a2419; }
-.feedback-panel h3 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 17px;
-  margin: 0 0 6px;
-}
-.feedback-panel ul { margin: 4px 0 0; padding-left: 20px; }
-.feedback-panel li { margin-bottom: 4px; }
+.site-footer { text-align: center; font-size: 18px; margin-top: 40px; color: var(--ink-soft); }
 
-/* ---------- endgame / celebrate ---------- */
-
-.endgame, .celebrate {
-  margin-top: 22px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 20px 22px;
-  box-shadow: var(--shadow);
-  text-align: center;
-}
-.endgame-title, .celebrate-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 24px;
-  margin: 0 0 8px;
-  color: var(--fence-dark);
-}
-.endgame-question { margin: 0 0 14px; }
-.endgame-input-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-.endgame-input-row input {
-  font-family: var(--font-mono);
-  font-size: 18px;
-  text-align: center;
-  width: 110px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1.5px solid var(--line);
-}
-.endgame-feedback {
-  margin: 12px auto 0;
-  max-width: 480px;
-  font-size: 14.5px;
-  padding: 10px 14px;
-  border-radius: 8px;
-}
-.endgame-feedback.good { background: var(--tick-green-soft); color: #1e4d33; }
-.endgame-feedback.bad { background: var(--cross-red-soft); color: #7a2419; }
-
-.celebrate { border-top: 5px solid var(--tick-green); }
-.celebrate-text { margin: 0 0 16px; }
-
-/* ---------- footer ---------- */
-
-.site-footer { text-align: center; color: var(--ink-soft); font-size: 13px; margin-top: 20px; }
-
-/* ---------- small screens ---------- */
-
-@media (max-width: 560px) {
-  .brand { font-size: 32px; }
-  .paddock { gap: 4px; }
-  .paddock .tile:nth-child(10n + 6) { margin-left: 6px; }
-  .tile { border-radius: 7px; }
-  .cell-input { width: 60px; font-size: 14px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .btn, .tile { transition: none; }
+/* ---------- mobile view scaling ---------- */
+@media (max-width: 800px) {
+  html, body { font-size: 20px; }
+  .brand { font-size: 40px; }
+  .problem-text { font-size: 22px; }
+  .cell-input { font-size: 20px; width: 60px; }
+  .gnc-table th { font-size: 14px; }
 }
 </style>
 </head>
@@ -378,34 +232,34 @@ html, body {
 
   <section class="problem-card">
     <p class="problem-label">The problem</p>
-    <p class="problem-text">Kathleen owns a farm where she rears goats and chicken. She counted <strong>110 legs</strong> for the <strong>40 animals</strong> that she has in the farm. <strong>How many of the animals are chicken?</strong></p>
+    <p class="problem-text">Kathleen owns a farm where she rears goats and chicken. She counted <strong>58 legs</strong> for the <strong>20 animals</strong> that she has in the farm. <strong>How many of the animals are chicken?</strong></p>
   </section>
 
-  <section class="paddock-section" aria-label="Animal paddock">
+  <section class="paddock-section">
     <div class="paddock-toolbar">
-      <div class="live-counts" id="liveCounts" aria-live="polite"></div>
+      <div class="live-counts" id="liveCounts"></div>
       <div class="toolbar-buttons">
         <button class="btn btn-ghost btn-small" id="allGoatsBtn" type="button">All goats</button>
         <button class="btn btn-ghost btn-small" id="allChickensBtn" type="button">All chicken</button>
-        <button class="btn btn-ghost btn-small btn-danger" id="resetBtn" type="button">Reset</button>
+        <button class="btn btn-ghost btn-small" id="resetBtn" type="button">Reset</button>
       </div>
     </div>
-    <div class="paddock" id="paddock" role="group" aria-label="Tap each animal to change it between question mark, goat and chicken"></div>
-    <p class="paddock-hint">Tap an animal to change it: <span class="hint-seq">? &rarr; goat &rarr; chicken &rarr; ?</span> &middot; or type numbers straight into the table.</p>
-    <p class="paddock-error" id="paddockError" role="alert" hidden></p>
+    <div class="paddock" id="paddock"></div>
+    <p class="paddock-hint">Tap an animal to change it: ? &rarr; goat &rarr; chicken</p>
+    <p id="paddockError" style="color:red; text-align:center; font-size:20px;" hidden></p>
   </section>
 
   <section class="table-section">
     <div class="table-scroll">
-      <table class="gnc-table" aria-label="Guess-and-Check table">
+      <table class="gnc-table">
         <thead>
           <tr>
             <th>Goats</th>
-            <th>No of legs <span class="th-note">(&times; 4)</span></th>
+            <th>Legs <span class="th-note">(&times; 4)</span></th>
             <th>Chicken</th>
-            <th>No of legs <span class="th-note">(&times; 2)</span></th>
-            <th>Total number of animals <span class="th-note">(40)</span></th>
-            <th>Total number of legs <span class="th-note">(110)</span></th>
+            <th>Legs <span class="th-note">(&times; 2)</span></th>
+            <th>Total Animals <span class="th-note">(20)</span></th>
+            <th>Total Legs <span class="th-note">(58)</span></th>
             <th>Check</th>
             <th>Comment</th>
           </tr>
@@ -416,665 +270,180 @@ html, body {
     <div class="row-controls">
       <button class="btn btn-primary" id="submitRowBtn" type="button">Submit row</button>
     </div>
-    <div class="feedback-panel" id="feedbackPanel" aria-live="polite" hidden></div>
+    <div id="feedbackPanel" class="feedback-panel" hidden></div>
   </section>
 
   <section class="endgame" id="endgame" hidden>
-    <h2 class="endgame-title">One last step&hellip;</h2>
-    <p class="endgame-question">Your total matches 110 legs. So &mdash; <strong>how many of the animals are chicken?</strong></p>
+    <h2 class="endgame-title">Almost there!</h2>
+    <p>Your total matches 58 legs. So — <strong>how many of the animals are chicken?</strong></p>
     <div class="endgame-input-row">
-      <input type="number" id="finalAnswer" inputmode="numeric" min="0" max="40" aria-label="Your final answer: how many of the animals are chicken" />
-      <button class="btn btn-primary" id="finalAnswerBtn" type="button">Check my answer</button>
+      <input type="number" id="finalAnswer" min="0" max="20" />
+      <button class="btn btn-primary" id="finalAnswerBtn" type="button">Check</button>
     </div>
-    <p class="endgame-feedback" id="endgameFeedback" aria-live="polite" hidden></p>
+    <p id="endgameFeedback" class="feedback-panel" hidden></p>
   </section>
 
   <section class="celebrate" id="celebrate" hidden>
-    <h2 class="celebrate-title" id="celebrateTitle"></h2>
-    <p class="celebrate-text" id="celebrateText"></p>
+    <h2 class="brand" id="celebrateTitle"></h2>
+    <p id="celebrateText"></p>
     <button class="btn btn-primary" id="playAgainBtn" type="button">Start over</button>
   </section>
 
   <footer class="site-footer">
-    <p>Your work saves automatically on this device. Use Reset to start fresh.</p>
+    <p>Practice your logic by guessing and checking!</p>
   </footer>
 </div>
 
 <script>
-/* ===== LOGIC (problem definition & validation — swappable) ===== */
-
+/* ===== LOGIC ===== */
 var PROBLEM = {
-  title: "Kathleen's Farm",
-  statement:
-    "Kathleen owns a farm where she rears goats and chicken. She counted 110 legs for the 40 animals that she has in the farm. How many of the animals are chicken?",
-  totalAnimals: 40,
-  targetLegs: 110,
-  itemA: { key: "goats", label: "Goats", legs: 4 },
-  itemB: { key: "chickens", label: "Chicken", legs: 2 },
-  askKey: "chickens",
-  answer: 25, // chickens
-  otherAnswer: 15, // goats
+  totalAnimals: 20,
+  targetLegs: 58,
+  itemA: { legs: 4 },
+  itemB: { legs: 2 },
+  answer: 11, // chickens
+  otherAnswer: 9, // goats
 };
 
-// row = { goats, chickens, legsA, legsB, totalAnimals, totalLegs, check ("tick"|"cross"), comment ("high"|"low"|"") }
 function validateRow(problem, row) {
   var issues = [];
-  var A = problem.itemA, B = problem.itemB;
-
-  function bad(field, hint, exact) {
-    issues.push({ field: field, hint: hint, exact: exact });
+  if ((row.goats + row.chickens) < problem.totalAnimals) {
+      issues.push({field: "allocation", hint: "Assign all 20 animals in the paddock first!"});
   }
-
-  var goats = row.goats, chickens = row.chickens;
-
-  // 0. Allocation completeness (all icons assigned)
-  if (goats + chickens < problem.totalAnimals) {
-    var missing = problem.totalAnimals - (goats + chickens);
-    bad(
-      "allocation",
-      "Some animals are still showing \u201c?\u201d \u2014 every animal must be a goat or a chicken.",
-      "You have " + missing + " unassigned animal" + (missing === 1 ? "" : "s") + ". Assign " +
-        (missing === 1 ? "it" : "them") + " so goats + chicken = " + problem.totalAnimals + "."
-    );
+  if (row.legsA !== (row.goats * 4)) issues.push({field: "legsA", hint: "Goats have 4 legs. Check your math."});
+  if (row.legsB !== (row.chickens * 2)) issues.push({field: "legsB", hint: "Chicken have 2 legs. Check your math."});
+  if (row.totalAnimals !== (row.goats + row.chickens)) issues.push({field: "totalAnimals", hint: "Total animals should be Goats + Chicken."});
+  if (row.totalLegs !== (row.legsA + row.legsB)) issues.push({field: "totalLegs", hint: "Total legs should be the sum of both leg columns."});
+  
+  if (row.totalLegs === problem.targetLegs) {
+      if (row.check !== "tick") issues.push({field: "check", hint: "Total is 58! Check should be ✓."});
+  } else {
+      if (row.check !== "cross") issues.push({field: "check", hint: "Total isn't 58. Check should be ✗."});
+      var expectedComment = row.totalLegs > problem.targetLegs ? "high" : "low";
+      if (row.comment !== expectedComment) issues.push({field: "comment", hint: "Is the total too high or too low?"});
   }
-
-  // 1. Goat legs
-  var correctLegsA = goats * A.legs;
-  if (row.legsA !== correctLegsA) {
-    bad(
-      "legsA",
-      "Check the goats\u2019 legs \u2014 each goat has " + A.legs + " legs.",
-      goats + " \u00d7 " + A.legs + " = " + correctLegsA + ", not " + fmt(row.legsA) + "."
-    );
-  }
-
-  // 2. Chicken legs
-  var correctLegsB = chickens * B.legs;
-  if (row.legsB !== correctLegsB) {
-    bad(
-      "legsB",
-      "Check the chickens\u2019 legs \u2014 each chicken has " + B.legs + " legs.",
-      chickens + " \u00d7 " + B.legs + " = " + correctLegsB + ", not " + fmt(row.legsB) + "."
-    );
-  }
-
-  // 3. Total animals
-  var correctTotalAnimals = goats + chickens;
-  if (row.totalAnimals !== correctTotalAnimals) {
-    bad(
-      "totalAnimals",
-      "Check your total number of animals \u2014 add your goats and chicken.",
-      goats + " + " + chickens + " = " + correctTotalAnimals + ", not " + fmt(row.totalAnimals) + "."
-    );
-  }
-
-  // 4. Total legs (adds THEIR legs values, even if those were wrong — each check is independent)
-  var expectedTotalLegs = safe(row.legsA) + safe(row.legsB);
-  if (row.totalLegs !== expectedTotalLegs) {
-    bad(
-      "totalLegs",
-      "Check your total number of legs \u2014 add your two legs columns.",
-      fmt(row.legsA) + " + " + fmt(row.legsB) + " = " + expectedTotalLegs + ", not " + fmt(row.totalLegs) + "."
-    );
-  }
-
-  // 5. Check/Comment consistency — judged against the STUDENT'S OWN totalLegs vs target
-  var t = row.totalLegs;
-  if (!isNaN(t)) {
-    if (t === problem.targetLegs) {
-      if (row.check !== "tick") {
-        bad(
-          "check",
-          "Compare your total legs with the number in the question. What should Check be?",
-          "Your total is " + t + ", which matches " + problem.targetLegs + " \u2014 Check should be \u2713."
-        );
-      }
-    } else {
-      if (row.check !== "cross") {
-        bad(
-          "check",
-          "Compare your total legs with " + problem.targetLegs + ". Do they match?",
-          "Your total is " + t + ", which does not match " + problem.targetLegs + " \u2014 Check should be \u2717."
-        );
-      }
-      var expectedComment = t > problem.targetLegs ? "high" : "low";
-      if (row.comment !== expectedComment) {
-        bad(
-          "comment",
-          "Is your total more or less than " + problem.targetLegs + "?",
-          "Your total " + t + " is " + (t > problem.targetLegs ? "more" : "less") + " than " +
-            problem.targetLegs + " \u2014 the comment should be " +
-            (expectedComment === "high" ? "High" : "Low") + "."
-        );
-      }
-    }
-  }
-
   return { ok: issues.length === 0, issues: issues };
-}
-
-function safe(n) { return isNaN(n) ? 0 : n; }
-function fmt(n) { return isNaN(n) ? "(blank)" : String(n); }
-
-function isWinningRow(problem, row) {
-  return row.totalLegs === problem.targetLegs && row.check === "tick";
-}
-
-function checkFinalAnswer(problem, value) {
-  if (value === problem.answer) {
-    return { ok: true, message: "Yes! " + problem.answer + " of the animals are chicken. You answered the exact question asked." };
-  }
-  if (value === problem.targetLegs) {
-    return { ok: false, message: String(problem.targetLegs) + " is the total number of legs. The question asks how many animals are CHICKEN \u2014 look at your winning row." };
-  }
-  if (value === problem.otherAnswer) {
-    return { ok: false, message: String(problem.otherAnswer) + " is the number of GOATS. Read the question again \u2014 which animal does it ask about?" };
-  }
-  if (value === problem.totalAnimals) {
-    return { ok: false, message: String(problem.totalAnimals) + " is the total number of animals. The question asks for the chicken only." };
-  }
-  return { ok: false, message: "Not quite. Look at your winning row \u2014 how many chicken did it use?" };
 }
 
 /* ===== UI ===== */
 (function () {
-  "use strict";
-
   var P = PROBLEM;
-  var STORAGE_KEY = "kathleensFarmState_v1";
+  var STORAGE_KEY = "kathleensFarmState_v2"; // Version 2
 
-  // ---------- SVG icons (full body, legs visible) ----------
+  var SVG_Q = '<svg viewBox="0 0 48 48"><text x="24" y="36" text-anchor="middle" font-size="38" font-weight="bold" fill="#8a857a">?</text></svg>';
+  var SVG_GOAT = '<svg viewBox="0 0 48 48"><rect x="7" y="13" width="28" height="16" rx="7" fill="#cdb58a"/><circle cx="37" cy="12" r="7" fill="#cdb58a"/><rect x="9" y="27" width="4" height="12" fill="#a8916a"/><rect x="31" y="27" width="4" height="12" fill="#a8916a"/></svg>';
+  var SVG_CHICKEN = '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="12" fill="#f6f1e7" stroke="#dccdb4"/><path d="M34 20 L40 24 L34 28 Z" fill="#e8a13c"/><rect x="20" y="34" width="3" height="8" fill="#e8a13c"/><rect x="25" y="34" width="3" height="8" fill="#e8a13c"/></svg>';
 
-  var SVG_Q =
-    '<svg viewBox="0 0 48 48" aria-hidden="true"><text x="24" y="34" text-anchor="middle" font-size="26" font-weight="600" fill="#8a857a" font-family="system-ui,sans-serif">?</text></svg>';
-
-  var SVG_GOAT =
-    '<svg viewBox="0 0 48 48" aria-hidden="true">' +
-    '<rect x="7" y="13" width="28" height="16" rx="7" fill="#cdb58a"/>' +
-    '<rect x="9" y="27" width="4.5" height="15" rx="2" fill="#a8916a"/>' +
-    '<rect x="16.5" y="27" width="4.5" height="15" rx="2" fill="#a8916a"/>' +
-    '<rect x="24" y="27" width="4.5" height="15" rx="2" fill="#a8916a"/>' +
-    '<rect x="31.5" y="27" width="4.5" height="15" rx="2" fill="#a8916a"/>' +
-    '<rect x="8" y="40" width="6.5" height="3" rx="1.2" fill="#6e5c40"/>' +
-    '<rect x="15.5" y="40" width="6.5" height="3" rx="1.2" fill="#6e5c40"/>' +
-    '<rect x="23" y="40" width="6.5" height="3" rx="1.2" fill="#6e5c40"/>' +
-    '<rect x="30.5" y="40" width="6.5" height="3" rx="1.2" fill="#6e5c40"/>' +
-    '<circle cx="37" cy="12" r="7" fill="#cdb58a"/>' +
-    '<path d="M33.5 6.5 C32 2.5, 35.5 1.5, 36.5 5" fill="none" stroke="#8a7a5c" stroke-width="2" stroke-linecap="round"/>' +
-    '<path d="M40.5 6.5 C42 2.5, 38.5 1.5, 37.5 5" fill="none" stroke="#8a7a5c" stroke-width="2" stroke-linecap="round"/>' +
-    '<path d="M30.5 11.5 C27.5 10.5, 27 13, 30 13.5 Z" fill="#b09a76"/>' +
-    '<circle cx="38.6" cy="11" r="1.4" fill="#3a3428"/>' +
-    '<ellipse cx="41.5" cy="15" rx="2.4" ry="2" fill="#e8dcc4"/>' +
-    '<path d="M6.5 17 C3.5 18, 3.5 22, 6 23" fill="none" stroke="#a8916a" stroke-width="2.6" stroke-linecap="round"/>' +
-    "</svg>";
-
-  var SVG_CHICKEN =
-    '<svg viewBox="0 0 48 48" aria-hidden="true">' +
-    '<ellipse cx="21" cy="24" rx="14" ry="11.5" fill="#f6f1e7" stroke="#dccdb4" stroke-width="1"/>' +
-    '<path d="M9 22 C4 19.5, 4 27, 9 26 Z" fill="#eee4d2"/>' +
-    '<circle cx="32.5" cy="13.5" r="6.5" fill="#f6f1e7" stroke="#dccdb4" stroke-width="1"/>' +
-    '<path d="M29.5 8 C28.5 3.5, 32 3, 32.5 6.2 C33.5 3, 36.5 4, 35 8 Z" fill="#d9534f"/>' +
-    '<path d="M38.5 12.5 L43.5 14.5 L38.5 16.5 Z" fill="#e8a13c"/>' +
-    '<circle cx="34" cy="12.5" r="1.4" fill="#33302a"/>' +
-    '<path d="M35.5 18.5 C37 20.5, 35.5 22, 33.8 21" fill="#d9534f"/>' +
-    '<rect x="15.5" y="34" width="3.4" height="9" rx="1.5" fill="#e8a13c"/>' +
-    '<rect x="24.5" y="34" width="3.4" height="9" rx="1.5" fill="#e8a13c"/>' +
-    '<path d="M12.5 43 L22 43 M17.2 39.5 L17.2 43" stroke="#d08a2c" stroke-width="2.2" stroke-linecap="round" fill="none"/>' +
-    '<path d="M21.5 43 L31 43 M26.2 39.5 L26.2 43" stroke="#d08a2c" stroke-width="2.2" stroke-linecap="round" fill="none"/>' +
-    "</svg>";
-
-  var ICONS = ["q", "goat", "chicken"];
-  var ICON_SVGS = { q: SVG_Q, goat: SVG_GOAT, chicken: SVG_CHICKEN };
-  var ICON_LABELS = { q: "unassigned", goat: "goat", chicken: "chicken" };
-
-  // ---------- state ----------
-
-  var state = {
-    assign: [],
-    lockedRows: [],
-    attempts: 0,
-    stage: "guessing", // "guessing" | "endgame" | "done"
-    endgameAttempts: 0,
-  };
-
+  var state = { assign: Array(P.totalAnimals).fill("q"), lockedRows: [], stage: "guessing" };
   var el = {};
 
   function qs(id) { return document.getElementById(id); }
 
-  function freshAssign() {
-    var a = [];
-    for (var i = 0; i < P.totalAnimals; i++) a.push("q");
-    return a;
-  }
-
-  // ---------- persistence ----------
-
   function saveState() {
-    try {
-      var activeInputs = readActiveRowRaw();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        assign: state.assign,
-        lockedRows: state.lockedRows,
-        attempts: state.attempts,
-        stage: state.stage,
-        endgameAttempts: state.endgameAttempts,
-        activeInputs: activeInputs,
-      }));
-    } catch (e) { /* private mode etc. — fine */ }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      assign: state.assign, lockedRows: state.lockedRows, stage: state.stage
+    }));
   }
-
-  function loadState() {
-    try {
-      var raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return null;
-      var s = JSON.parse(raw);
-      if (!s || !Array.isArray(s.assign) || s.assign.length !== P.totalAnimals) return null;
-      return s;
-    } catch (e) { return null; }
-  }
-
-  // ---------- counts ----------
-
-  function countOf(kind) {
-    var n = 0;
-    for (var i = 0; i < state.assign.length; i++) if (state.assign[i] === kind) n++;
-    return n;
-  }
-
-  // Promote "?"s from the start, or demote `kind` back to "?" from the end.
-  function setCount(kind, target) {
-    var current = countOf(kind);
-    if (target === current) return true;
-    var i;
-    if (target > current) {
-      var need = target - current;
-      if (countOf("q") < need) return false;
-      for (i = 0; i < state.assign.length && need > 0; i++) {
-        if (state.assign[i] === "q") { state.assign[i] = kind; need--; }
-      }
-    } else {
-      var drop = current - target;
-      for (i = state.assign.length - 1; i >= 0 && drop > 0; i--) {
-        if (state.assign[i] === kind) { state.assign[i] = "q"; drop--; }
-      }
-    }
-    return true;
-  }
-
-  // ---------- rendering: paddock ----------
 
   function renderPaddock() {
     var html = "";
-    for (var i = 0; i < state.assign.length; i++) {
-      var kind = state.assign[i];
-      html +=
-        '<button type="button" class="tile is-' + kind + '" data-index="' + i +
-        '" aria-label="Animal ' + (i + 1) + ": " + ICON_LABELS[kind] + '">' +
-        ICON_SVGS[kind] + "</button>";
-    }
+    state.assign.forEach((kind, i) => {
+      html += `<button class="tile is-${kind}" data-index="${i}">${kind==='goat'?SVG_GOAT : (kind==='chicken'?SVG_CHICKEN:SVG_Q)}</button>`;
+    });
     el.paddock.innerHTML = html;
-    renderCounts();
+    var g = state.assign.filter(x=>x==='goat').length;
+    var c = state.assign.filter(x=>x==='chicken').length;
+    el.liveCounts.innerHTML = `Goats: ${g} &middot; Chicken: ${c} &middot; ?: ${20-(g+c)}`;
+    if(qs("inGoats")) qs("inGoats").value = g;
+    if(qs("inChickens")) qs("inChickens").value = c;
   }
-
-  function updateTile(i) {
-    var btn = el.paddock.querySelector('[data-index="' + i + '"]');
-    if (!btn) return;
-    var kind = state.assign[i];
-    btn.className = "tile is-" + kind;
-    btn.setAttribute("aria-label", "Animal " + (i + 1) + ": " + ICON_LABELS[kind]);
-    btn.innerHTML = ICON_SVGS[kind];
-  }
-
-  function renderCounts() {
-    var g = countOf("goat"), c = countOf("chicken"), q = countOf("q");
-    el.liveCounts.innerHTML =
-      '<span class="lc-goat">Goats: ' + g + "</span> &middot; " +
-      '<span class="lc-chicken">Chicken: ' + c + "</span> &middot; " +
-      '<span class="lc-q">?: ' + q + "</span>";
-  }
-
-  function showPaddockError(msg) {
-    el.paddockError.hidden = false;
-    el.paddockError.textContent = msg;
-    clearTimeout(showPaddockError._t);
-    showPaddockError._t = setTimeout(function () { el.paddockError.hidden = true; }, 4000);
-  }
-
-  // ---------- rendering: table ----------
 
   function renderTable() {
     var html = "";
-    for (var r = 0; r < state.lockedRows.length; r++) {
-      var row = state.lockedRows[r];
-      html +=
-        "<tr class=\"locked\">" +
-        "<td>" + row.goats + "</td>" +
-        "<td>" + row.legsA + "</td>" +
-        "<td>" + row.chickens + "</td>" +
-        "<td>" + row.legsB + "</td>" +
-        "<td>" + row.totalAnimals + "</td>" +
-        "<td>" + row.totalLegs + "</td>" +
-        '<td class="' + (row.check === "tick" ? "cell-tick" : "cell-cross") + '">' + (row.check === "tick" ? "\u2713" : "\u2717") + "</td>" +
-        "<td>" + (row.check === "tick" ? "Correct!" : (row.comment === "high" ? "High" : "Low")) + "</td>" +
-        "</tr>";
-    }
+    state.lockedRows.forEach(row => {
+      html += `<tr class="locked"><td>${row.goats}</td><td>${row.legsA}</td><td>${row.chickens}</td><td>${row.legsB}</td><td>${row.totalAnimals}</td><td>${row.totalLegs}</td><td style="color:${row.check==='tick'?'green':'red'}">${row.check==='tick'?'✓':'✗'}</td><td>${row.check==='tick'?'Correct':(row.comment==='high'?'High':'Low')}</td></tr>`;
+    });
     if (state.stage === "guessing") {
-      html +=
-        '<tr class="active" id="activeRow">' +
-        '<td><input class="cell-input" id="inGoats" type="number" inputmode="numeric" min="0" max="' + P.totalAnimals + '" aria-label="Number of goats" /></td>' +
-        '<td><input class="cell-input" id="inLegsA" type="number" inputmode="numeric" min="0" aria-label="Goats legs" /></td>' +
-        '<td><input class="cell-input" id="inChickens" type="number" inputmode="numeric" min="0" max="' + P.totalAnimals + '" aria-label="Number of chicken" /></td>' +
-        '<td><input class="cell-input" id="inLegsB" type="number" inputmode="numeric" min="0" aria-label="Chicken legs" /></td>' +
-        '<td><input class="cell-input" id="inTotalAnimals" type="number" inputmode="numeric" min="0" aria-label="Total number of animals" /></td>' +
-        '<td><input class="cell-input" id="inTotalLegs" type="number" inputmode="numeric" min="0" aria-label="Total number of legs" /></td>' +
-        '<td><select class="cell-select" id="inCheck" aria-label="Check">' +
-        '<option value=""></option><option value="tick">\u2713</option><option value="cross">\u2717</option></select></td>' +
-        '<td><select class="cell-select" id="inComment" aria-label="Comment">' +
-        '<option value=""></option><option value="high">High</option><option value="low">Low</option></select></td>' +
-        "</tr>";
-    }
-    var shown = state.lockedRows.length + (state.stage === "guessing" ? 1 : 0);
-    for (var pad = shown; pad < 5; pad++) {
-      html += "<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+      html += `<tr id="activeRow">
+        <td><input class="cell-input" id="inGoats" type="number" readonly /></td>
+        <td><input class="cell-input" id="inLegsA" type="number" /></td>
+        <td><input class="cell-input" id="inChickens" type="number" readonly /></td>
+        <td><input class="cell-input" id="inLegsB" type="number" /></td>
+        <td><input class="cell-input" id="inTotalAnimals" type="number" /></td>
+        <td><input class="cell-input" id="inTotalLegs" type="number" /></td>
+        <td><select class="cell-select" id="inCheck"><option value=""></option><option value="tick">✓</option><option value="cross">✗</option></select></td>
+        <td><select class="cell-select" id="inComment"><option value=""></option><option value="high">High</option><option value="low">Low</option></select></td>
+      </tr>`;
     }
     el.tableBody.innerHTML = html;
-
-    if (state.stage === "guessing") {
-      wireActiveRow();
-      syncCountCellsFromIcons();
-    }
-    el.submitRowBtn.disabled = state.stage !== "guessing";
   }
 
-  function wireActiveRow() {
-    var inGoats = qs("inGoats"), inChickens = qs("inChickens");
-    inGoats.addEventListener("input", function () { onCountTyped("goat", inGoats); });
-    inChickens.addEventListener("input", function () { onCountTyped("chicken", inChickens); });
-    qs("inCheck").addEventListener("change", function () {
-      var c = qs("inCheck").value;
-      var comment = qs("inComment");
-      if (c === "tick") { comment.value = ""; comment.disabled = true; }
-      else { comment.disabled = false; }
-      saveState();
-    });
-    ["inLegsA", "inLegsB", "inTotalAnimals", "inTotalLegs", "inComment"].forEach(function (id) {
-      qs(id).addEventListener("input", saveState);
-      qs(id).addEventListener("change", saveState);
-    });
-  }
-
-  function onCountTyped(kind, input) {
-    if (input.value === "") { saveState(); return; }
-    var v = parseInt(input.value, 10);
-    if (isNaN(v) || v < 0) return;
-    var other = kind === "goat" ? countOf("chicken") : countOf("goat");
-    if (v + other > P.totalAnimals) {
-      showPaddockError(
-        "That makes " + (v + other) + " animals \u2014 Kathleen only has " + P.totalAnimals + "."
-      );
-      input.value = countOf(kind);
-      return;
-    }
-    setCount(kind, v);
-    renderPaddock();
-    saveState();
-  }
-
-  function syncCountCellsFromIcons() {
-    var inGoats = qs("inGoats"), inChickens = qs("inChickens");
-    if (inGoats) inGoats.value = countOf("goat");
-    if (inChickens) inChickens.value = countOf("chicken");
-  }
-
-  // ---------- reading the active row ----------
-
-  function readActiveRowRaw() {
-    if (state.stage !== "guessing") return null;
-    var g = qs("inGoats");
-    if (!g) return null;
-    return {
-      legsA: qs("inLegsA").value,
-      legsB: qs("inLegsB").value,
-      totalAnimals: qs("inTotalAnimals").value,
-      totalLegs: qs("inTotalLegs").value,
+  function onSubmit() {
+    var row = {
+      goats: state.assign.filter(x=>x==='goat').length,
+      chickens: state.assign.filter(x=>x==='chicken').length,
+      legsA: parseInt(qs("inLegsA").value),
+      legsB: parseInt(qs("inLegsB").value),
+      totalAnimals: parseInt(qs("inTotalAnimals").value),
+      totalLegs: parseInt(qs("inTotalLegs").value),
       check: qs("inCheck").value,
-      comment: qs("inComment").value,
+      comment: qs("inComment").value
     };
-  }
-
-  function readActiveRow() {
-    return {
-      goats: countOf("goat"),
-      chickens: countOf("chicken"),
-      legsA: parseIntSafe(qs("inLegsA").value),
-      legsB: parseIntSafe(qs("inLegsB").value),
-      totalAnimals: parseIntSafe(qs("inTotalAnimals").value),
-      totalLegs: parseIntSafe(qs("inTotalLegs").value),
-      check: qs("inCheck").value,
-      comment: qs("inComment").value,
-    };
-  }
-
-  function parseIntSafe(v) {
-    if (v === "" || v === null || v === undefined) return NaN;
-    var n = parseInt(v, 10);
-    return isNaN(n) ? NaN : n;
-  }
-
-  // ---------- submit ----------
-
-  var FIELD_TO_INPUT = {
-    legsA: "inLegsA", legsB: "inLegsB",
-    totalAnimals: "inTotalAnimals", totalLegs: "inTotalLegs",
-    check: "inCheck", comment: "inComment",
-  };
-
-  function clearFlags() {
-    Object.keys(FIELD_TO_INPUT).forEach(function (f) {
-      var input = qs(FIELD_TO_INPUT[f]);
-      if (input) input.classList.remove("flagged");
-    });
-  }
-
-  function onSubmitRow() {
-    if (state.stage !== "guessing") return;
-    clearFlags();
-    var row = readActiveRow();
-
-    var missing = [];
-    if (isNaN(row.legsA)) missing.push("goats\u2019 legs");
-    if (isNaN(row.legsB)) missing.push("chicken\u2019s legs");
-    if (isNaN(row.totalAnimals)) missing.push("total animals");
-    if (isNaN(row.totalLegs)) missing.push("total legs");
-    if (!row.check) missing.push("Check");
-    if (row.check === "cross" && !row.comment) missing.push("Comment");
-    if (missing.length) {
-      showFeedback("bad", "Almost ready", ["Fill in: " + missing.join(", ") + "."]);
+    var res = validateRow(P, row);
+    if (!res.ok) {
+      el.feedbackPanel.hidden = false;
+      el.feedbackPanel.className = "feedback-panel bad";
+      el.feedbackPanel.innerHTML = "Check these points:<ul>" + res.issues.map(i=>`<li>${i.hint}</li>`).join("") + "</ul>";
       return;
     }
-
-    var result = validateRow(P, row);
-    if (!result.ok) {
-      state.attempts += 1;
-      var useExact = state.attempts >= 2;
-      var msgs = result.issues.map(function (iss) {
-        var input = qs(FIELD_TO_INPUT[iss.field]);
-        if (input) input.classList.add("flagged");
-        return useExact ? iss.exact : iss.hint;
-      });
-      showFeedback(
-        "bad",
-        useExact ? "Here\u2019s exactly what to fix" : "Check these before resubmitting",
-        msgs
-      );
-      saveState();
-      return;
-    }
-
     state.lockedRows.push(row);
-    state.attempts = 0;
-
-    if (isWinningRow(P, row)) {
+    if (row.totalLegs === P.targetLegs) {
       state.stage = "endgame";
-      renderTable();
       el.endgame.hidden = false;
-      showFeedback("good", "Your total matches 110!", ["One more step below \u2014 answer the exact question asked."]);
-      el.endgame.scrollIntoView({ behavior: "smooth", block: "center" });
-    } else {
-      var direction = row.totalLegs > P.targetLegs ? "went over" : "fell short of";
-      var gap = Math.abs(row.totalLegs - P.targetLegs);
-      renderTable();
-      showFeedback("good", "Good row \u2014 consistent working", [
-        "Your total of " + row.totalLegs + " " + direction + " 110 by " + gap + ". Use that to choose your next guess \u2014 tap the animals to adjust.",
-      ]);
-      var active = qs("activeRow");
-      if (active) active.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-    saveState();
-  }
-
-  function showFeedback(kind, title, items) {
-    el.feedbackPanel.hidden = false;
-    el.feedbackPanel.className = "feedback-panel " + kind;
-    var html = "<h3>" + title + "</h3>";
-    if (items.length === 1) html += "<p style=\"margin:0\">" + items[0] + "</p>";
-    else html += "<ul>" + items.map(function (m) { return "<li>" + m + "</li>"; }).join("") + "</ul>";
-    el.feedbackPanel.innerHTML = html;
-  }
-
-  // ---------- endgame ----------
-
-  function onFinalAnswer() {
-    var v = parseIntSafe(qs("finalAnswer").value);
-    if (isNaN(v)) return;
-    var res = checkFinalAnswer(P, v);
-    var fb = qs("endgameFeedback");
-    fb.hidden = false;
-    fb.className = "endgame-feedback " + (res.ok ? "good" : "bad");
-    fb.textContent = res.message;
-    if (res.ok) {
-      state.stage = "done";
-      el.endgame.hidden = true;
-      var guesses = state.lockedRows.length;
-      qs("celebrateTitle").textContent = "\uD83C\uDF89 " + P.answer + " chicken!";
-      qs("celebrateText").textContent =
-        "You solved it in " + guesses + " guess" + (guesses === 1 ? "" : "es") +
-        " \u2014 " + P.answer + " chicken and " + P.otherAnswer + " goats give exactly " +
-        P.targetLegs + " legs. Well done for answering the exact question asked.";
-      el.celebrate.hidden = false;
-      el.celebrate.scrollIntoView({ behavior: "smooth", block: "center" });
-    } else {
-      state.endgameAttempts += 1;
-    }
-    saveState();
-  }
-
-  // ---------- reset ----------
-
-  function onReset() {
-    if (!window.confirm("Start over? This clears the whole table and all the animals.")) return;
-    doReset();
-  }
-
-  function doReset() {
-    state.assign = freshAssign();
-    state.lockedRows = [];
-    state.attempts = 0;
-    state.stage = "guessing";
-    state.endgameAttempts = 0;
-    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-    el.endgame.hidden = true;
-    el.celebrate.hidden = true;
-    el.feedbackPanel.hidden = true;
-    qs("finalAnswer").value = "";
-    qs("endgameFeedback").hidden = true;
-    renderPaddock();
     renderTable();
     saveState();
   }
 
-  // ---------- init ----------
+  function onFinal() {
+    var val = parseInt(qs("finalAnswer").value);
+    if (val === P.answer) {
+      el.endgame.hidden = true;
+      el.celebrate.hidden = false;
+      qs("celebrateTitle").innerText = "🎉 11 Chicken!";
+      qs("celebrateText").innerText = "Correct! 11 chicken and 9 goats make 58 legs.";
+    } else {
+      qs("endgameFeedback").hidden = false;
+      qs("endgameFeedback").innerText = "Not quite. Look at your winning row!";
+    }
+  }
 
   function init() {
-    el.paddock = qs("paddock");
-    el.liveCounts = qs("liveCounts");
-    el.paddockError = qs("paddockError");
-    el.tableBody = qs("tableBody");
-    el.submitRowBtn = qs("submitRowBtn");
-    el.feedbackPanel = qs("feedbackPanel");
-    el.endgame = qs("endgame");
-    el.celebrate = qs("celebrate");
+    el.paddock = qs("paddock"); el.liveCounts = qs("liveCounts"); el.tableBody = qs("tableBody");
+    el.feedbackPanel = qs("feedbackPanel"); el.endgame = qs("endgame"); el.celebrate = qs("celebrate");
+    
+    var saved = localStorage.getItem(STORAGE_KEY);
+    if(saved) { var s = JSON.parse(saved); state.assign = s.assign; state.lockedRows = s.lockedRows; state.stage = s.stage; }
 
-    var saved = loadState();
-    if (saved) {
-      state.assign = saved.assign;
-      state.lockedRows = saved.lockedRows || [];
-      state.attempts = saved.attempts || 0;
-      state.stage = saved.stage || "guessing";
-      state.endgameAttempts = saved.endgameAttempts || 0;
-    } else {
-      state.assign = freshAssign();
-    }
-
-    renderPaddock();
-    renderTable();
-
-    if (state.stage === "endgame") el.endgame.hidden = false;
-    if (state.stage === "done") {
-      qs("celebrateTitle").textContent = "\uD83C\uDF89 " + P.answer + " chicken!";
-      qs("celebrateText").textContent =
-        "You already solved this one \u2014 " + P.answer + " chicken and " + P.otherAnswer +
-        " goats give exactly " + P.targetLegs + " legs. Start over to try again.";
-      el.celebrate.hidden = false;
-    }
-
-    if (saved && saved.activeInputs && state.stage === "guessing") {
-      var a = saved.activeInputs;
-      if (a) {
-        if (qs("inLegsA")) qs("inLegsA").value = a.legsA || "";
-        if (qs("inLegsB")) qs("inLegsB").value = a.legsB || "";
-        if (qs("inTotalAnimals")) qs("inTotalAnimals").value = a.totalAnimals || "";
-        if (qs("inTotalLegs")) qs("inTotalLegs").value = a.totalLegs || "";
-        if (qs("inCheck")) qs("inCheck").value = a.check || "";
-        if (qs("inComment")) {
-          qs("inComment").value = a.comment || "";
-          qs("inComment").disabled = a.check === "tick";
-        }
-      }
-    }
-
-    el.paddock.addEventListener("click", function (e) {
-      var btn = e.target.closest(".tile");
-      if (!btn || state.stage !== "guessing") return;
-      var i = parseInt(btn.dataset.index, 10);
-      var next = ICONS[(ICONS.indexOf(state.assign[i]) + 1) % ICONS.length];
-      state.assign[i] = next;
-      updateTile(i);
-      renderCounts();
-      syncCountCellsFromIcons();
-      saveState();
+    el.paddock.addEventListener("click", e => {
+      var btn = e.target.closest(".tile"); if(!btn || state.stage !== "guessing") return;
+      var i = btn.dataset.index;
+      var cycle = ["q", "goat", "chicken"];
+      state.assign[i] = cycle[(cycle.indexOf(state.assign[i]) + 1) % 3];
+      renderPaddock(); saveState();
     });
 
-    qs("allGoatsBtn").addEventListener("click", function () {
-      if (state.stage !== "guessing") return;
-      state.assign = state.assign.map(function () { return "goat"; });
-      renderPaddock(); syncCountCellsFromIcons(); saveState();
-    });
-    qs("allChickensBtn").addEventListener("click", function () {
-      if (state.stage !== "guessing") return;
-      state.assign = state.assign.map(function () { return "chicken"; });
-      renderPaddock(); syncCountCellsFromIcons(); saveState();
-    });
-    qs("resetBtn").addEventListener("click", onReset);
-    el.submitRowBtn.addEventListener("click", onSubmitRow);
-    qs("finalAnswerBtn").addEventListener("click", onFinalAnswer);
-    qs("finalAnswer").addEventListener("keydown", function (e) {
-      if (e.key === "Enter") onFinalAnswer();
-    });
-    qs("playAgainBtn").addEventListener("click", doReset);
+    qs("allGoatsBtn").onclick = () => { state.assign.fill("goat"); renderPaddock(); saveState(); };
+    qs("allChickensBtn").onclick = () => { state.assign.fill("chicken"); renderPaddock(); saveState(); };
+    qs("resetBtn").onclick = () => { if(confirm("Reset?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } };
+    qs("submitRowBtn").onclick = onSubmit;
+    qs("finalAnswerBtn").onclick = onFinal;
+    qs("playAgainBtn").onclick = () => { localStorage.removeItem(STORAGE_KEY); location.reload(); };
+
+    renderPaddock(); renderTable();
+    if(state.stage === "endgame") el.endgame.hidden = false;
   }
-
-  document.addEventListener("DOMContentLoaded", init);
+  init();
 })();
 </script>
 </body>
