@@ -98,7 +98,6 @@ html, body {
   gap: 12px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 .demo-toggle-wrap input { width: 26px; height: 26px; cursor: pointer; }
 
@@ -141,10 +140,9 @@ html, body {
   justify-content: center;
   transition: transform 0.1s ease;
 }
-.tile:active { transform: scale(0.9); }
-.tile svg { width: 100%; height: 100%; display: block; }
+.tile svg { width: 95%; height: 95%; display: block; }
 
-/* ---------- simulation dashboard (between icons and table) ---------- */
+/* ---------- simulation dashboard ---------- */
 .sim-dashboard {
   background: #fff;
   border: 4px solid var(--amber);
@@ -152,14 +150,20 @@ html, body {
   padding: 15px;
   margin-bottom: 25px;
   text-align: center;
-  box-shadow: var(--shadow);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
-.sim-title { font-size: 22px; font-weight: 700; color: var(--amber); margin-bottom: 12px; text-transform: uppercase; }
-.sim-controls { display: flex; justify-content: center; align-items: center; gap: 30px; flex-wrap: wrap; }
-.sim-input-item { display: flex; align-items: center; gap: 10px; font-weight: 700; }
-.sim-icon { width: 50px; height: 50px; border: 2px solid var(--line); border-radius: 8px; }
+.sim-title { font-size: 22px; font-weight: 700; color: var(--amber); margin-bottom: 15px; text-transform: uppercase; }
+.sim-controls { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 20px; 
+    flex-wrap: wrap; 
+}
+.sim-input-item { display: flex; align-items: center; gap: 8px; font-weight: 700; }
+.sim-icon-box { width: 60px; height: 60px; border: 2px solid var(--line); border-radius: 10px; background: #fafafa; }
 .sim-input-item input { 
-  width: 100px; font-family: var(--font-mono); font-size: 32px; text-align: center; padding: 5px; 
+  width: 90px; font-family: var(--font-mono); font-size: 32px; text-align: center; padding: 5px; 
   border: 3px solid var(--amber); border-radius: 10px; 
 }
 
@@ -205,8 +209,10 @@ html, body {
   border-radius: 12px;
   border: none;
   cursor: pointer;
+  transition: opacity 0.2s;
 }
 .btn-primary { background: var(--fence-dark); color: #fff; }
+.btn-primary:active { opacity: 0.8; }
 .btn-ghost { background: var(--paper); border: 2px solid var(--line); color: var(--ink-soft); }
 .btn-small { font-size: 20px; padding: 8px 16px; }
 .btn-danger { color: var(--cross-red); }
@@ -228,7 +234,7 @@ html, body {
   .brand { font-size: 36px; }
   .gnc-table th, .th-note { font-size: 14px; }
   .cell-input { font-size: 18px; width: 60px; }
-  .sim-icon { display: none; }
+  .sim-icon-box { display: none; }
 }
 </style>
 </head>
@@ -266,13 +272,14 @@ html, body {
     <div class="sim-title">Simulation Dashboard</div>
     <div class="sim-controls">
       <div class="sim-input-item">
-        <div class="sim-icon" id="simIconGoat"></div>
+        <div class="sim-icon-box" id="dashIconGoat"></div>
         Goats: <input type="number" id="demoGoats" min="0" max="20">
       </div>
       <div class="sim-input-item">
-        <div class="sim-icon" id="simIconChicken"></div>
+        <div class="sim-icon-box" id="dashIconChicken"></div>
         Chicken: <input type="number" id="demoChickens" min="0" max="20">
       </div>
+      <button class="btn btn-primary" id="demoSubmitBtn">Submit Row</button>
     </div>
   </div>
 
@@ -294,7 +301,7 @@ html, body {
         <tbody id="tableBody"></tbody>
       </table>
     </div>
-    <div class="row-controls">
+    <div class="row-controls" id="manualControls">
       <button class="btn btn-primary" id="submitRowBtn">Submit Row</button>
     </div>
     <div id="feedbackPanel" class="feedback-panel hidden"></div>
@@ -321,16 +328,38 @@ html, body {
 <script>
 (function () {
   const P = { totalAnimals: 20, targetLegs: 58, answer: 11 };
-  const STORAGE_KEY = "kathleensFarmState_v4";
+  const STORAGE_KEY = "kathleensFarmState_v5";
 
-  // --- ICONS (Strictly matching provided images) ---
+  // --- REALISTIC ICONS ---
   const SVG_Q = `<svg viewBox="0 0 100 100"><rect x="5" y="5" width="90" height="90" rx="15" fill="#f4f1e8" stroke="#dcd9ce" stroke-width="2"/><path d="M50 70v-4m0-8c0-12 15-12 15-22 0-8-15-8-15 0" fill="none" stroke="#8d897e" stroke-width="8" stroke-linecap="round"/><circle cx="50" cy="74" r="5" fill="#8d897e"/></svg>`;
   
-  // Goat: Front-facing, two eyes visible, goatee, horns
-  const SVG_GOAT = `<svg viewBox="0 0 100 100"><rect x="5" y="5" width="90" height="90" rx="15" fill="#f4f1e8" stroke="#dcd9ce" stroke-width="2"/><path d="M35 65 L35 85 M45 65 L45 85 M55 65 L55 85 M65 65 L65 85" stroke="#a89b84" stroke-width="6" stroke-linecap="round"/><rect x="25" y="35" width="50" height="30" rx="10" fill="#cdb58a"/><path d="M35 25 Q35 10 30 10 M65 25 Q65 10 70 10" stroke="#8d897e" stroke-width="5" fill="none"/><path d="M50 65 L50 75" stroke="#8d897e" stroke-width="6" stroke-linecap="round"/><circle cx="40" cy="45" r="3" fill="#333"/><circle cx="60" cy="45" r="3" fill="#333"/></svg>`;
+  const SVG_GOAT = `<svg viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="48" fill="#efe9d8" />
+    <path d="M35 60 L32 85 M45 60 L43 85 M60 60 L62 85 M70 60 L75 85" stroke="#a8916a" stroke-width="4" stroke-linecap="round"/>
+    <path d="M29 85 H35 M40 85 H46 M60 85 H66 M72 85 H78" stroke="#6e5c40" stroke-width="4" stroke-linecap="round"/>
+    <path d="M22 45 Q22 32 40 32 H65 Q82 32 82 50 Q82 65 65 65 H40 Q22 65 22 45" fill="#cdb58a" />
+    <path d="M22 42 L14 36" stroke="#cdb58a" stroke-width="5" stroke-linecap="round" />
+    <path d="M65 45 L78 22 Q84 12 92 25 L82 58 Z" fill="#cdb58a" />
+    <path d="M80 55 L80 65" stroke="#8d897e" stroke-width="4" stroke-linecap="round" />
+    <path d="M76 20 Q70 5 58 8 M84 18 Q88 3 96 10" fill="none" stroke="#8d897e" stroke-width="3" stroke-linecap="round" />
+    <circle cx="81" cy="30" r="2.5" fill="#333" />
+    <circle cx="89" cy="34" r="2.5" fill="#333" />
+  </svg>`;
   
-  // Chicken: Background color circle, white body, dual vertical legs
-  const SVG_CHICKEN = `<svg viewBox="0 0 100 100"><rect x="5" y="5" width="90" height="90" rx="15" fill="#f4f1e8" stroke="#dcd9ce" stroke-width="2"/><circle cx="50" cy="50" r="38" fill="#efe9d8"/><path d="M44 70 L44 88 M56 70 L56 88" stroke="#f1a13e" stroke-width="6" stroke-linecap="round"/><circle cx="48" cy="48" r="24" fill="#fff"/><path d="M72 45 L80 48 L72 51" fill="#f1a13e"/><path d="M55 25 Q60 15 65 25" fill="#d9534f"/><circle cx="62" cy="42" r="3" fill="#333"/></svg>`;
+  const SVG_CHICKEN = `<svg viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="48" fill="#efe9d8" />
+    <path d="M44 70 L44 88 M56 70 L56 88" stroke="#f1a13e" stroke-width="5" stroke-linecap="round"/>
+    <path d="M40 88 H48 M52 88 H60 M44 82 L40 91 M56 82 L60 91" stroke="#f1a13e" stroke-width="3" stroke-linecap="round"/>
+    <path d="M25 50 Q25 28 55 28 Q85 28 85 55 Q85 78 55 78 Q25 78 25 50" fill="#ffffff" stroke="#dcd9ce" stroke-width="1"/>
+    <path d="M40 55 Q50 42 68 55 Q50 68 40 55" fill="#fdf3ec" />
+    <path d="M65 38 Q72 15 82 32 L72 58 Z" fill="#ffffff" />
+    <path d="M26 40 L15 30 M26 45 L12 40 M26 50 L15 55" stroke="#fdf3ec" stroke-width="4" stroke-linecap="round" />
+    <path d="M74 22 Q76 8 80 20 Q84 8 88 22" fill="#d9534f" />
+    <path d="M84 45 Q84 54 78 52" fill="#d9534f" />
+    <path d="M85 38 L95 42 L85 46 Z" fill="#f1a13e" />
+    <circle cx="79" cy="35" r="3" fill="#333" />
+    <circle cx="80" cy="34" r="1" fill="#fff" />
+  </svg>`;
 
   let state = {
     assign: Array(P.totalAnimals).fill("q"),
@@ -343,7 +372,9 @@ html, body {
     paddock: document.getElementById('paddock'),
     liveCounts: document.getElementById('liveCounts'),
     tableBody: document.getElementById('tableBody'),
-    submitBtn: document.getElementById('submitRowBtn'),
+    manualBtn: document.getElementById('submitRowBtn'),
+    demoSubmitBtn: document.getElementById('demoSubmitBtn'),
+    manualControls: document.getElementById('manualControls'),
     feedback: document.getElementById('feedbackPanel'),
     demoModeToggle: document.getElementById('demoModeToggle'),
     demoPanel: document.getElementById('demoPanel'),
@@ -361,9 +392,8 @@ html, body {
       el.demoModeToggle.checked = state.demoMode;
     }
     
-    // Setup Icon placeholders for dashboard
-    document.getElementById('simIconGoat').innerHTML = SVG_GOAT;
-    document.getElementById('simIconChicken').innerHTML = SVG_CHICKEN;
+    document.getElementById('dashIconGoat').innerHTML = SVG_GOAT;
+    document.getElementById('dashIconChicken').innerHTML = SVG_CHICKEN;
 
     renderPaddock();
     renderTable();
@@ -374,7 +404,6 @@ html, body {
     el.demoModeToggle.onchange = (e) => {
       state.demoMode = e.target.checked;
       if (state.demoMode) {
-        // Auto-populate "?" with Goat when starting simulation
         state.assign = state.assign.map(x => x === 'q' ? 'goat' : x);
       }
       toggleDemoUI();
@@ -388,9 +417,10 @@ html, body {
     
     document.getElementById('allGoatsBtn').onclick = () => fillPaddock('goat');
     document.getElementById('allChickensBtn').onclick = () => fillPaddock('chicken');
-    document.getElementById('resetBtn').onclick = resetApp;
+    document.getElementById('resetBtn').onclick = () => { if(confirm("Reset?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } };
     
-    el.submitBtn.onclick = submitRow;
+    el.manualBtn.onclick = submitRow;
+    el.demoSubmitBtn.onclick = submitRow;
     document.getElementById('finalAnswerBtn').onclick = checkFinal;
   }
 
@@ -402,6 +432,7 @@ html, body {
 
   function toggleDemoUI() {
     el.demoPanel.classList.toggle('hidden', !state.demoMode);
+    el.manualControls.classList.toggle('hidden', state.demoMode);
     if (state.demoMode) {
       const g = state.assign.filter(x => x === 'goat').length;
       el.demoGoats.value = g;
@@ -421,10 +452,7 @@ html, body {
       gCount = 20 - cCount;
       el.demoGoats.value = gCount;
     }
-    state.assign = [
-      ...Array(gCount).fill('goat'),
-      ...Array(20 - gCount).fill('chicken')
-    ];
+    state.assign = [...Array(gCount).fill('goat'), ...Array(20 - gCount).fill('chicken')];
     renderPaddock();
     save();
   }
@@ -449,7 +477,6 @@ html, body {
     const c = state.assign.filter(x => x === 'chicken').length;
     el.liveCounts.innerText = `Goats: ${g}  |  Chicken: ${c}`;
     
-    // Sync table in manual mode
     if (!state.demoMode && document.getElementById('inGoats')) {
       document.getElementById('inGoats').value = g;
       document.getElementById('inChickens').value = c;
@@ -458,9 +485,9 @@ html, body {
 
   function toggleTile(index) {
     if (state.stage !== 'guessing') return;
-    const current = state.assign[index];
-    if (current === 'q') state.assign[index] = 'goat';
-    else state.assign[index] = current === 'goat' ? 'chicken' : 'goat';
+    const cur = state.assign[index];
+    if (cur === 'q') state.assign[index] = 'goat';
+    else state.assign[index] = cur === 'goat' ? 'chicken' : 'goat';
     
     renderPaddock();
     if (state.demoMode) {
@@ -477,14 +504,13 @@ html, body {
       html += `<tr class="locked"><td>${r.goats}</td><td>${r.legsA}</td><td>${r.chickens}</td><td>${r.legsB}</td><td>${r.totalAnimals}</td><td>${r.totalLegs}</td><td>${r.totalLegs==58?'✓':'✗'}</td><td>${r.comment}</td></tr>`;
     });
 
-    // Manual Row Input - only if Demo mode is OFF
     if (state.stage === 'guessing' && !state.demoMode) {
-      const gCount = state.assign.filter(x => x === 'goat').length;
-      const cCount = state.assign.filter(x => x === 'chicken').length;
+      const g = state.assign.filter(x => x === 'goat').length;
+      const c = state.assign.filter(x => x === 'chicken').length;
       html += `<tr>
-        <td><input class="cell-input" id="inGoats" type="number" value="${gCount}" oninput="syncPaddockManual('goat')"></td>
+        <td><input class="cell-input" id="inGoats" type="number" value="${g}" oninput="syncPaddockManual('goat')"></td>
         <td><input class="cell-input" id="inLegsA" type="number"></td>
-        <td><input class="cell-input" id="inChickens" type="number" value="${cCount}" oninput="syncPaddockManual('chicken')"></td>
+        <td><input class="cell-input" id="inChickens" type="number" value="${c}" oninput="syncPaddockManual('chicken')"></td>
         <td><input class="cell-input" id="inLegsB" type="number"></td>
         <td><input class="cell-input" id="inTotalAnimals" type="number"></td>
         <td><input class="cell-input" id="inTotalLegs" type="number"></td>
@@ -498,57 +524,43 @@ html, body {
   window.syncPaddockManual = function(kind) {
     const gIn = document.getElementById('inGoats');
     const cIn = document.getElementById('inChickens');
-    let gVal = parseInt(gIn.value) || 0;
-    let cVal = parseInt(cIn.value) || 0;
-
-    if (gVal + cVal > 20) {
-      if (kind === 'goat') gIn.value = 20 - cVal;
-      else cIn.value = 20 - gVal;
-    }
-    
+    let gV = parseInt(gIn.value) || 0;
+    let cV = parseInt(cIn.value) || 0;
+    if (gV + cV > 20) { if (kind === 'goat') gIn.value = 20 - cV; else cIn.value = 20 - gV; }
     const fG = parseInt(gIn.value) || 0;
     const fC = parseInt(cIn.value) || 0;
     state.assign = [...Array(fG).fill('goat'), ...Array(fC).fill('chicken'), ...Array(20 - (fG + fC)).fill('q')];
-    renderPaddock();
-    save();
+    renderPaddock(); save();
   }
 
   function submitRow() {
     if (state.stage !== 'guessing') return;
-    let data;
-
+    let d;
     if (state.demoMode) {
       const g = parseInt(el.demoGoats.value);
       const c = 20 - g;
-      const tL = (g * 4) + (c * 2);
-      data = { goats: g, chickens: c, legsA: g * 4, legsB: c * 2, totalAnimals: 20, totalLegs: tL, comment: tL == 58 ? 'Correct' : (tL > 58 ? 'High' : 'Low') };
+      const t = (g * 4) + (c * 2);
+      d = { goats: g, chickens: c, legsA: g * 4, legsB: c * 2, totalAnimals: 20, totalLegs: t, comment: t == 58 ? 'Correct' : (t > 58 ? 'High' : 'Low') };
     } else {
       const g = parseInt(document.getElementById('inGoats').value) || 0;
       const c = parseInt(document.getElementById('inChickens').value) || 0;
       if (g + c < 20) { alert("Assign all 20 animals!"); return; }
-      
-      const lA = parseInt(document.getElementById('inLegsA').value), lB = parseInt(document.getElementById('inLegsB').value);
-      const tA = parseInt(document.getElementById('inTotalAnimals').value), tL = parseInt(document.getElementById('inTotalLegs').value);
-      const chk = document.getElementById('inCheck').value, comm = document.getElementById('inComment').value;
-
+      const lA = parseInt(document.getElementById('inLegsA').value), lB = parseInt(document.getElementById('inLegsB').value),
+            tA = parseInt(document.getElementById('inTotalAnimals').value), tL = parseInt(document.getElementById('inTotalLegs').value),
+            chk = document.getElementById('inCheck').value, comm = document.getElementById('inComment').value;
       if ([lA, lB, tA, tL].some(isNaN) || !chk || (chk==='cross' && !comm)) { alert("Fill all fields!"); return; }
       if (lA !== g*4 || lB !== c*2 || tA !== 20 || tL !== (lA+lB)) { 
         el.feedback.innerText = "Check your calculations!"; el.feedback.className = "feedback-panel bad"; el.feedback.classList.remove('hidden'); return; 
       }
-      data = { goats: g, chickens: c, legsA: lA, legsB: lB, totalAnimals: tA, totalLegs: tL, comment: comm || 'Correct' };
+      d = { goats: g, chickens: c, legsA: lA, legsB: lB, totalAnimals: tA, totalLegs: tL, comment: comm || 'Correct' };
     }
-
-    state.lockedRows.push(data);
+    state.lockedRows.push(d);
     el.feedback.classList.add('hidden');
-    if (data.totalLegs === 58) state.stage = 'endgame';
-    renderTable();
-    checkEndgameVisibility();
-    save();
+    if (d.totalLegs === 58) state.stage = 'endgame';
+    renderTable(); checkEndgameVisibility(); save();
   }
 
-  function checkEndgameVisibility() {
-    el.endgame.classList.toggle('hidden', state.stage !== 'endgame');
-  }
+  function checkEndgameVisibility() { el.endgame.classList.toggle('hidden', state.stage !== 'endgame'); }
 
   function checkFinal() {
     const val = parseInt(document.getElementById('finalAnswer').value);
@@ -559,13 +571,7 @@ html, body {
       document.getElementById('celebrateTitle').innerText = "Correct! 11 Chickens";
       document.getElementById('celebrateText').innerText = "11 chickens (22 legs) and 9 goats (36 legs) make exactly 58 legs.";
       save();
-    } else {
-      fb.innerText = "Not quite. Look at your winning row!"; fb.className = "feedback-panel bad";
-    }
-  }
-
-  function resetApp() {
-    if(confirm("Reset entire puzzle?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
+    } else { fb.innerText = "Not quite. Look at your winning row!"; fb.className = "feedback-panel bad"; }
   }
 
   init();
