@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Kathleen's Farm — Guess-and-Check</title>
-<meta name="description" content="Interactive Guess-and-Check practice: allocate 20 farm animals and balance the legs." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
@@ -17,8 +16,6 @@
   --paper: #fdfbf4;
   --ink: #2b2f26;
   --ink-soft: #5c6353;
-  --goat-tan: #cdb58a;
-  --chicken-cream: #fdf3ec;
   --tick-green: #2f7d4f;
   --tick-green-soft: #e2efe6;
   --cross-red: #c0392b;
@@ -26,7 +23,6 @@
   --amber: #c98a2c;
   --line: #e2ddcd;
   --radius: 12px;
-  --shadow: 0 2px 8px rgba(43, 47, 38, 0.08);
   --font-display: 'Baloo 2', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
@@ -40,28 +36,27 @@ html, body {
   background: var(--pasture);
   color: var(--ink);
   font-family: var(--font-body);
-  /* LARGE FONT BASE */
   font-size: 32px; 
   line-height: 1.4;
 }
 
 .page {
-  max-width: 1100px; /* Widened slightly to accommodate larger table */
+  max-width: 1150px;
   margin: 0 auto;
-  padding: 24px 14px 60px;
+  padding: 10px 14px 60px;
 }
 
 /* ---------- header ---------- */
-.site-header { text-align: center; padding-bottom: 20px; }
+.site-header { text-align: center; padding-bottom: 10px; }
 .brand {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 60px;
+  font-size: 50px;
   margin: 0;
   color: var(--fence-dark);
   line-height: 1;
 }
-.subtitle { margin: 5px 0 0; color: var(--ink-soft); font-size: 24px; }
+.subtitle { margin: 0; color: var(--ink-soft); font-size: 20px; }
 
 /* ---------- problem card ---------- */
 .problem-card {
@@ -69,65 +64,77 @@ html, body {
   border: 1px solid var(--line);
   border-left: 10px solid var(--amber);
   border-radius: var(--radius);
-  padding: 20px 24px;
-  box-shadow: var(--shadow);
-  margin-bottom: 24px;
+  padding: 15px 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
 }
-.problem-label {
-  font-family: var(--font-mono);
-  font-size: 18px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--amber);
-  margin: 0 0 10px;
-}
-.problem-text { margin: 0; font-size: 32px; font-weight: 500; }
+.problem-text { margin: 0; font-size: 28px; font-weight: 500; }
 
-/* ---------- paddock ---------- */
+/* ---------- paddock & toolbar ---------- */
 .paddock-section {
   background: var(--pasture-deep);
   border: 4px solid var(--fence);
   border-radius: 20px;
   padding: 16px;
-  box-shadow: var(--shadow);
   position: relative;
+  margin-bottom: 20px;
+}
+.toolbar-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
-.paddock-toolbar {
+.demo-toggle-wrap {
+  background: var(--paper);
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  font-size: 22px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.demo-toggle-wrap input { width: 26px; height: 26px; cursor: pointer; }
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .live-counts {
   font-family: var(--font-mono);
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--fence-dark);
   background: var(--paper);
   border: 2px solid var(--line);
   border-radius: 999px;
-  padding: 8px 20px;
+  padding: 5px 20px;
+  margin-bottom: 10px;
+  display: inline-block;
 }
 
 .paddock {
   display: grid;
-  /* 5 COLUMNS PER YOUR REQUEST */
   grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-  max-width: 600px;
+  gap: 10px;
+  max-width: 480px;
   margin: 0 auto;
 }
-
 .tile {
   aspect-ratio: 1;
-  border-radius: 12px;
+  border-radius: 15px;
   border: 2px solid #c9c5ba;
-  background: #eceae4;
-  padding: 0;
+  background: #fdfbf4;
+  padding: 2px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -135,90 +142,93 @@ html, body {
   transition: transform 0.1s ease;
 }
 .tile:active { transform: scale(0.9); }
-.tile svg { width: 90%; height: 90%; display: block; }
+.tile svg { width: 100%; height: 100%; display: block; }
 
-.tile.is-goat { background: #f3ede2; border-color: #d8cdb8; }
-.tile.is-chicken { background: var(--chicken-cream); border-color: #ecd5c2; }
-
-.paddock-hint { margin: 15px 0 0; font-size: 20px; color: var(--fence-dark); text-align: center; }
+/* ---------- simulation dashboard (between icons and table) ---------- */
+.sim-dashboard {
+  background: #fff;
+  border: 4px solid var(--amber);
+  border-radius: var(--radius);
+  padding: 15px;
+  margin-bottom: 25px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.sim-title { font-size: 22px; font-weight: 700; color: var(--amber); margin-bottom: 12px; text-transform: uppercase; }
+.sim-controls { display: flex; justify-content: center; align-items: center; gap: 30px; flex-wrap: wrap; }
+.sim-input-item { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.sim-icon { width: 50px; height: 50px; border: 2px solid var(--line); border-radius: 8px; }
+.sim-input-item input { 
+  width: 100px; font-family: var(--font-mono); font-size: 32px; text-align: center; padding: 5px; 
+  border: 3px solid var(--amber); border-radius: 10px; 
+}
 
 /* ---------- table ---------- */
-.table-scroll { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); margin-top: 30px; }
-
-.gnc-table {
-  width: 100%;
-  min-width: 1000px;
-  border-collapse: collapse;
-  background: var(--paper);
-}
+.table-scroll { overflow-x: auto; border-radius: var(--radius); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.gnc-table { width: 100%; min-width: 1000px; border-collapse: collapse; background: var(--paper); }
 .gnc-table th {
   background: #efe9d8;
   color: var(--ink-soft);
-  font-size: 22px; /* 1.5x original approx */
-  padding: 12px 8px;
+  font-size: 22px; 
+  padding: 12px 5px;
   border-bottom: 3px solid var(--line);
 }
-.th-note { display: block; font-family: var(--font-mono); font-size: 16px; color: var(--amber); }
+.th-note { font-family: var(--font-mono); font-size: 22px; color: var(--amber); font-weight: 700; }
 
 .gnc-table td {
   border-bottom: 1px solid var(--line);
-  padding: 10px 5px;
+  padding: 10px 4px;
   text-align: center;
   font-size: 28px;
 }
-
 .gnc-table tr.locked td { font-family: var(--font-mono); background: #fbf8ef; }
 
-/* INPUT STYLING */
 .cell-input {
   width: 90px;
   font-family: var(--font-mono);
-  font-size: 30px; /* LARGE FONT */
-  text-align: center; /* CENTERED PER REQUEST */
-  padding: 8px 0; /* NO HORIZONTAL PADDING */
+  font-size: 30px;
+  text-align: center;
+  padding: 8px 0;
   border-radius: 8px;
   border: 2px solid var(--line);
 }
-.cell-select {
-  font-size: 22px;
-  padding: 8px 4px;
-  border-radius: 8px;
-  border: 2px solid var(--line);
-}
+.cell-select { font-size: 22px; padding: 8px; border-radius: 8px; border: 2px solid var(--line); }
 
-.row-controls { display: flex; justify-content: flex-end; margin-top: 20px; }
+.row-controls { display: flex; justify-content: flex-end; margin-top: 15px; }
 
 /* ---------- buttons ---------- */
 .btn {
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: 26px; /* LARGER FONT */
-  padding: 10px 18px; /* REDUCED PADDING TO KEEP SIZE STABLE */
-  border-radius: 10px;
+  font-size: 24px;
+  padding: 10px 24px;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
 }
 .btn-primary { background: var(--fence-dark); color: #fff; }
 .btn-ghost { background: var(--paper); border: 2px solid var(--line); color: var(--ink-soft); }
-.btn-small { font-size: 18px; padding: 6px 12px; }
+.btn-small { font-size: 20px; padding: 8px 16px; }
+.btn-danger { color: var(--cross-red); }
 
 /* ---------- feedback & endgame ---------- */
-.feedback-panel { margin-top: 20px; border-radius: var(--radius); padding: 20px; font-size: 26px; }
-.endgame { margin-top: 30px; background: var(--paper); padding: 30px; border: 4px solid var(--amber); border-radius: var(--radius); text-align: center; }
-.endgame-title { font-size: 40px; margin-bottom: 10px; }
-.endgame-input-row input { font-size: 36px; width: 150px; text-align: center; padding: 10px; }
+.feedback-panel { margin-top: 15px; border-radius: var(--radius); padding: 20px; font-size: 24px; }
+.feedback-panel.bad { background: var(--cross-red-soft); color: var(--cross-red); border-left: 8px solid var(--cross-red); }
+.feedback-panel.good { background: var(--tick-green-soft); color: var(--tick-green); border-left: 8px solid var(--tick-green); }
 
-.celebrate { margin-top: 30px; padding: 40px; text-align: center; border-top: 10px solid var(--tick-green); background: white; }
+.endgame { margin: 30px 0; background: #fff; padding: 30px; border: 5px solid var(--amber); border-radius: var(--radius); text-align: center; }
+.endgame-input-row input { font-size: 40px; width: 120px; text-align: center; border: 3px solid var(--line); border-radius: 12px; }
 
-.site-footer { text-align: center; font-size: 18px; margin-top: 40px; color: var(--ink-soft); }
+.celebrate { margin-top: 30px; padding: 50px; text-align: center; border-top: 15px solid var(--tick-green); background: white; }
 
-/* ---------- mobile view scaling ---------- */
+.hidden { display: none !important; }
+
 @media (max-width: 800px) {
-  html, body { font-size: 20px; }
-  .brand { font-size: 40px; }
-  .problem-text { font-size: 22px; }
-  .cell-input { font-size: 20px; width: 60px; }
-  .gnc-table th { font-size: 14px; }
+  html, body { font-size: 18px; }
+  .brand { font-size: 36px; }
+  .gnc-table th, .th-note { font-size: 14px; }
+  .cell-input { font-size: 18px; width: 60px; }
+  .sim-icon { display: none; }
 }
 </style>
 </head>
@@ -227,27 +237,44 @@ html, body {
 
   <header class="site-header">
     <h1 class="brand">Kathleen's Farm</h1>
-    <p class="subtitle">Guess-and-Check &middot; goats &amp; chicken</p>
+    <p class="subtitle">Guess-and-Check Simulation</p>
   </header>
 
   <section class="problem-card">
-    <p class="problem-label">The problem</p>
     <p class="problem-text">Kathleen owns a farm where she rears goats and chicken. She counted <strong>58 legs</strong> for the <strong>20 animals</strong> that she has in the farm. <strong>How many of the animals are chicken?</strong></p>
   </section>
 
   <section class="paddock-section">
-    <div class="paddock-toolbar">
-      <div class="live-counts" id="liveCounts"></div>
-      <div class="toolbar-buttons">
-        <button class="btn btn-ghost btn-small" id="allGoatsBtn" type="button">All goats</button>
-        <button class="btn btn-ghost btn-small" id="allChickensBtn" type="button">All chicken</button>
-        <button class="btn btn-ghost btn-small" id="resetBtn" type="button">Reset</button>
+    <div class="toolbar-layout">
+      <label class="demo-toggle-wrap">
+        <input type="checkbox" id="demoModeToggle"> Demo Mode (Simulation)
+      </label>
+      <div class="button-group">
+        <button class="btn btn-ghost btn-small" id="allGoatsBtn">All Goats</button>
+        <button class="btn btn-ghost btn-small" id="allChickensBtn">All Chicken</button>
+        <button class="btn btn-ghost btn-small btn-danger" id="resetBtn">Reset</button>
       </div>
     </div>
+
+    <div style="text-align: center;">
+      <div class="live-counts" id="liveCounts"></div>
+    </div>
     <div class="paddock" id="paddock"></div>
-    <p class="paddock-hint">Tap an animal to change it: ? &rarr; goat &rarr; chicken</p>
-    <p id="paddockError" style="color:red; text-align:center; font-size:20px;" hidden></p>
   </section>
+
+  <div id="demoPanel" class="sim-dashboard hidden">
+    <div class="sim-title">Simulation Dashboard</div>
+    <div class="sim-controls">
+      <div class="sim-input-item">
+        <div class="sim-icon" id="simIconGoat"></div>
+        Goats: <input type="number" id="demoGoats" min="0" max="20">
+      </div>
+      <div class="sim-input-item">
+        <div class="sim-icon" id="simIconChicken"></div>
+        Chicken: <input type="number" id="demoChickens" min="0" max="20">
+      </div>
+    </div>
+  </div>
 
   <section class="table-section">
     <div class="table-scroll">
@@ -268,109 +295,199 @@ html, body {
       </table>
     </div>
     <div class="row-controls">
-      <button class="btn btn-primary" id="submitRowBtn" type="button">Submit row</button>
+      <button class="btn btn-primary" id="submitRowBtn">Submit Row</button>
     </div>
-    <div id="feedbackPanel" class="feedback-panel" hidden></div>
+    <div id="feedbackPanel" class="feedback-panel hidden"></div>
   </section>
 
-  <section class="endgame" id="endgame" hidden>
-    <h2 class="endgame-title">Almost there!</h2>
-    <p>Your total matches 58 legs. So — <strong>how many of the animals are chicken?</strong></p>
+  <section id="endgame" class="endgame hidden">
+    <h2 class="brand">Success!</h2>
+    <p>Your total matches 58 legs. Answer the final question:</p>
+    <p><strong>How many animals are chicken?</strong></p>
     <div class="endgame-input-row">
-      <input type="number" id="finalAnswer" min="0" max="20" />
-      <button class="btn btn-primary" id="finalAnswerBtn" type="button">Check</button>
+      <input type="number" id="finalAnswer" min="0" max="20">
+      <button class="btn btn-primary" id="finalAnswerBtn">Check</button>
     </div>
-    <p id="endgameFeedback" class="feedback-panel" hidden></p>
+    <p id="endgameFeedback" class="feedback-panel hidden" style="margin-top:10px;"></p>
   </section>
 
-  <section class="celebrate" id="celebrate" hidden>
+  <section id="celebrate" class="celebrate hidden">
     <h2 class="brand" id="celebrateTitle"></h2>
-    <p id="celebrateText"></p>
-    <button class="btn btn-primary" id="playAgainBtn" type="button">Start over</button>
+    <p id="celebrateText" style="font-size:30px;"></p>
+    <button class="btn btn-primary" onclick="location.reload()">Start Over</button>
   </section>
-
-  <footer class="site-footer">
-    <p>Practice your logic by guessing and checking!</p>
-  </footer>
 </div>
 
 <script>
-/* ===== LOGIC ===== */
-var PROBLEM = {
-  totalAnimals: 20,
-  targetLegs: 58,
-  itemA: { legs: 4 },
-  itemB: { legs: 2 },
-  answer: 11, // chickens
-  otherAnswer: 9, // goats
-};
-
-function validateRow(problem, row) {
-  var issues = [];
-  if ((row.goats + row.chickens) < problem.totalAnimals) {
-      issues.push({field: "allocation", hint: "Assign all 20 animals in the paddock first!"});
-  }
-  if (row.legsA !== (row.goats * 4)) issues.push({field: "legsA", hint: "Goats have 4 legs. Check your math."});
-  if (row.legsB !== (row.chickens * 2)) issues.push({field: "legsB", hint: "Chicken have 2 legs. Check your math."});
-  if (row.totalAnimals !== (row.goats + row.chickens)) issues.push({field: "totalAnimals", hint: "Total animals should be Goats + Chicken."});
-  if (row.totalLegs !== (row.legsA + row.legsB)) issues.push({field: "totalLegs", hint: "Total legs should be the sum of both leg columns."});
-  
-  if (row.totalLegs === problem.targetLegs) {
-      if (row.check !== "tick") issues.push({field: "check", hint: "Total is 58! Check should be ✓."});
-  } else {
-      if (row.check !== "cross") issues.push({field: "check", hint: "Total isn't 58. Check should be ✗."});
-      var expectedComment = row.totalLegs > problem.targetLegs ? "high" : "low";
-      if (row.comment !== expectedComment) issues.push({field: "comment", hint: "Is the total too high or too low?"});
-  }
-  return { ok: issues.length === 0, issues: issues };
-}
-
-/* ===== UI ===== */
 (function () {
-  var P = PROBLEM;
-  var STORAGE_KEY = "kathleensFarmState_v2"; // Version 2
+  const P = { totalAnimals: 20, targetLegs: 58, answer: 11 };
+  const STORAGE_KEY = "kathleensFarmState_v4";
 
-  var SVG_Q = '<svg viewBox="0 0 48 48"><text x="24" y="36" text-anchor="middle" font-size="38" font-weight="bold" fill="#8a857a">?</text></svg>';
-  var SVG_GOAT = '<svg viewBox="0 0 48 48"><rect x="7" y="13" width="28" height="16" rx="7" fill="#cdb58a"/><circle cx="37" cy="12" r="7" fill="#cdb58a"/><rect x="9" y="27" width="4" height="12" fill="#a8916a"/><rect x="31" y="27" width="4" height="12" fill="#a8916a"/></svg>';
-  var SVG_CHICKEN = '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="12" fill="#f6f1e7" stroke="#dccdb4"/><path d="M34 20 L40 24 L34 28 Z" fill="#e8a13c"/><rect x="20" y="34" width="3" height="8" fill="#e8a13c"/><rect x="25" y="34" width="3" height="8" fill="#e8a13c"/></svg>';
+  // --- ICONS (Strictly matching provided images) ---
+  const SVG_Q = `<svg viewBox="0 0 100 100"><rect x="5" y="5" width="90" height="90" rx="15" fill="#f4f1e8" stroke="#dcd9ce" stroke-width="2"/><path d="M50 70v-4m0-8c0-12 15-12 15-22 0-8-15-8-15 0" fill="none" stroke="#8d897e" stroke-width="8" stroke-linecap="round"/><circle cx="50" cy="74" r="5" fill="#8d897e"/></svg>`;
+  
+  // Goat: Front-facing, two eyes visible, goatee, horns
+  const SVG_GOAT = `<svg viewBox="0 0 100 100"><rect x="5" y="5" width="90" height="90" rx="15" fill="#f4f1e8" stroke="#dcd9ce" stroke-width="2"/><path d="M35 65 L35 85 M45 65 L45 85 M55 65 L55 85 M65 65 L65 85" stroke="#a89b84" stroke-width="6" stroke-linecap="round"/><rect x="25" y="35" width="50" height="30" rx="10" fill="#cdb58a"/><path d="M35 25 Q35 10 30 10 M65 25 Q65 10 70 10" stroke="#8d897e" stroke-width="5" fill="none"/><path d="M50 65 L50 75" stroke="#8d897e" stroke-width="6" stroke-linecap="round"/><circle cx="40" cy="45" r="3" fill="#333"/><circle cx="60" cy="45" r="3" fill="#333"/></svg>`;
+  
+  // Chicken: Background color circle, white body, dual vertical legs
+  const SVG_CHICKEN = `<svg viewBox="0 0 100 100"><rect x="5" y="5" width="90" height="90" rx="15" fill="#f4f1e8" stroke="#dcd9ce" stroke-width="2"/><circle cx="50" cy="50" r="38" fill="#efe9d8"/><path d="M44 70 L44 88 M56 70 L56 88" stroke="#f1a13e" stroke-width="6" stroke-linecap="round"/><circle cx="48" cy="48" r="24" fill="#fff"/><path d="M72 45 L80 48 L72 51" fill="#f1a13e"/><path d="M55 25 Q60 15 65 25" fill="#d9534f"/><circle cx="62" cy="42" r="3" fill="#333"/></svg>`;
 
-  var state = { assign: Array(P.totalAnimals).fill("q"), lockedRows: [], stage: "guessing" };
-  var el = {};
+  let state = {
+    assign: Array(P.totalAnimals).fill("q"),
+    lockedRows: [],
+    stage: "guessing",
+    demoMode: false
+  };
 
-  function qs(id) { return document.getElementById(id); }
+  const el = {
+    paddock: document.getElementById('paddock'),
+    liveCounts: document.getElementById('liveCounts'),
+    tableBody: document.getElementById('tableBody'),
+    submitBtn: document.getElementById('submitRowBtn'),
+    feedback: document.getElementById('feedbackPanel'),
+    demoModeToggle: document.getElementById('demoModeToggle'),
+    demoPanel: document.getElementById('demoPanel'),
+    demoGoats: document.getElementById('demoGoats'),
+    demoChickens: document.getElementById('demoChickens'),
+    endgame: document.getElementById('endgame'),
+    celebrate: document.getElementById('celebrate')
+  };
 
-  function saveState() {
+  function init() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const s = JSON.parse(saved);
+      state = {...state, ...s};
+      el.demoModeToggle.checked = state.demoMode;
+    }
+    
+    // Setup Icon placeholders for dashboard
+    document.getElementById('simIconGoat').innerHTML = SVG_GOAT;
+    document.getElementById('simIconChicken').innerHTML = SVG_CHICKEN;
+
+    renderPaddock();
+    renderTable();
+    checkEndgameVisibility();
+    toggleDemoUI();
+    
+    // Listeners
+    el.demoModeToggle.onchange = (e) => {
+      state.demoMode = e.target.checked;
+      if (state.demoMode) {
+        // Auto-populate "?" with Goat when starting simulation
+        state.assign = state.assign.map(x => x === 'q' ? 'goat' : x);
+      }
+      toggleDemoUI();
+      renderPaddock();
+      renderTable();
+      save();
+    };
+
+    el.demoGoats.oninput = () => syncDemo('goat');
+    el.demoChickens.oninput = () => syncDemo('chicken');
+    
+    document.getElementById('allGoatsBtn').onclick = () => fillPaddock('goat');
+    document.getElementById('allChickensBtn').onclick = () => fillPaddock('chicken');
+    document.getElementById('resetBtn').onclick = resetApp;
+    
+    el.submitBtn.onclick = submitRow;
+    document.getElementById('finalAnswerBtn').onclick = checkFinal;
+  }
+
+  function save() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      assign: state.assign, lockedRows: state.lockedRows, stage: state.stage
+      assign: state.assign, lockedRows: state.lockedRows, stage: state.stage, demoMode: state.demoMode
     }));
   }
 
+  function toggleDemoUI() {
+    el.demoPanel.classList.toggle('hidden', !state.demoMode);
+    if (state.demoMode) {
+      const g = state.assign.filter(x => x === 'goat').length;
+      el.demoGoats.value = g;
+      el.demoChickens.value = P.totalAnimals - g;
+    }
+  }
+
+  function syncDemo(leader) {
+    let gCount;
+    if (leader === 'goat') {
+      gCount = Math.min(20, Math.max(0, parseInt(el.demoGoats.value) || 0));
+      el.demoGoats.value = gCount;
+      el.demoChickens.value = 20 - gCount;
+    } else {
+      let cCount = Math.min(20, Math.max(0, parseInt(el.demoChickens.value) || 0));
+      el.demoChickens.value = cCount;
+      gCount = 20 - cCount;
+      el.demoGoats.value = gCount;
+    }
+    state.assign = [
+      ...Array(gCount).fill('goat'),
+      ...Array(20 - gCount).fill('chicken')
+    ];
+    renderPaddock();
+    save();
+  }
+
+  function fillPaddock(kind) {
+    state.assign = Array(20).fill(kind);
+    renderPaddock();
+    if (state.demoMode) toggleDemoUI();
+    save();
+  }
+
   function renderPaddock() {
-    var html = "";
+    el.paddock.innerHTML = "";
     state.assign.forEach((kind, i) => {
-      html += `<button class="tile is-${kind}" data-index="${i}">${kind==='goat'?SVG_GOAT : (kind==='chicken'?SVG_CHICKEN:SVG_Q)}</button>`;
+      const btn = document.createElement('button');
+      btn.className = `tile is-${kind}`;
+      btn.innerHTML = kind === 'goat' ? SVG_GOAT : (kind === 'chicken' ? SVG_CHICKEN : SVG_Q);
+      btn.onclick = () => toggleTile(i);
+      el.paddock.appendChild(btn);
     });
-    el.paddock.innerHTML = html;
-    var g = state.assign.filter(x=>x==='goat').length;
-    var c = state.assign.filter(x=>x==='chicken').length;
-    el.liveCounts.innerHTML = `Goats: ${g} &middot; Chicken: ${c} &middot; ?: ${20-(g+c)}`;
-    if(qs("inGoats")) qs("inGoats").value = g;
-    if(qs("inChickens")) qs("inChickens").value = c;
+    const g = state.assign.filter(x => x === 'goat').length;
+    const c = state.assign.filter(x => x === 'chicken').length;
+    el.liveCounts.innerText = `Goats: ${g}  |  Chicken: ${c}`;
+    
+    // Sync table in manual mode
+    if (!state.demoMode && document.getElementById('inGoats')) {
+      document.getElementById('inGoats').value = g;
+      document.getElementById('inChickens').value = c;
+    }
+  }
+
+  function toggleTile(index) {
+    if (state.stage !== 'guessing') return;
+    const current = state.assign[index];
+    if (current === 'q') state.assign[index] = 'goat';
+    else state.assign[index] = current === 'goat' ? 'chicken' : 'goat';
+    
+    renderPaddock();
+    if (state.demoMode) {
+      const g = state.assign.filter(x => x === 'goat').length;
+      el.demoGoats.value = g;
+      el.demoChickens.value = 20 - g;
+    }
+    save();
   }
 
   function renderTable() {
-    var html = "";
-    state.lockedRows.forEach(row => {
-      html += `<tr class="locked"><td>${row.goats}</td><td>${row.legsA}</td><td>${row.chickens}</td><td>${row.legsB}</td><td>${row.totalAnimals}</td><td>${row.totalLegs}</td><td style="color:${row.check==='tick'?'green':'red'}">${row.check==='tick'?'✓':'✗'}</td><td>${row.check==='tick'?'Correct':(row.comment==='high'?'High':'Low')}</td></tr>`;
+    let html = "";
+    state.lockedRows.forEach(r => {
+      html += `<tr class="locked"><td>${r.goats}</td><td>${r.legsA}</td><td>${r.chickens}</td><td>${r.legsB}</td><td>${r.totalAnimals}</td><td>${r.totalLegs}</td><td>${r.totalLegs==58?'✓':'✗'}</td><td>${r.comment}</td></tr>`;
     });
-    if (state.stage === "guessing") {
-      html += `<tr id="activeRow">
-        <td><input class="cell-input" id="inGoats" type="number" readonly /></td>
-        <td><input class="cell-input" id="inLegsA" type="number" /></td>
-        <td><input class="cell-input" id="inChickens" type="number" readonly /></td>
-        <td><input class="cell-input" id="inLegsB" type="number" /></td>
-        <td><input class="cell-input" id="inTotalAnimals" type="number" /></td>
-        <td><input class="cell-input" id="inTotalLegs" type="number" /></td>
+
+    // Manual Row Input - only if Demo mode is OFF
+    if (state.stage === 'guessing' && !state.demoMode) {
+      const gCount = state.assign.filter(x => x === 'goat').length;
+      const cCount = state.assign.filter(x => x === 'chicken').length;
+      html += `<tr>
+        <td><input class="cell-input" id="inGoats" type="number" value="${gCount}" oninput="syncPaddockManual('goat')"></td>
+        <td><input class="cell-input" id="inLegsA" type="number"></td>
+        <td><input class="cell-input" id="inChickens" type="number" value="${cCount}" oninput="syncPaddockManual('chicken')"></td>
+        <td><input class="cell-input" id="inLegsB" type="number"></td>
+        <td><input class="cell-input" id="inTotalAnimals" type="number"></td>
+        <td><input class="cell-input" id="inTotalLegs" type="number"></td>
         <td><select class="cell-select" id="inCheck"><option value=""></option><option value="tick">✓</option><option value="cross">✗</option></select></td>
         <td><select class="cell-select" id="inComment"><option value=""></option><option value="high">High</option><option value="low">Low</option></select></td>
       </tr>`;
@@ -378,71 +495,79 @@ function validateRow(problem, row) {
     el.tableBody.innerHTML = html;
   }
 
-  function onSubmit() {
-    var row = {
-      goats: state.assign.filter(x=>x==='goat').length,
-      chickens: state.assign.filter(x=>x==='chicken').length,
-      legsA: parseInt(qs("inLegsA").value),
-      legsB: parseInt(qs("inLegsB").value),
-      totalAnimals: parseInt(qs("inTotalAnimals").value),
-      totalLegs: parseInt(qs("inTotalLegs").value),
-      check: qs("inCheck").value,
-      comment: qs("inComment").value
-    };
-    var res = validateRow(P, row);
-    if (!res.ok) {
-      el.feedbackPanel.hidden = false;
-      el.feedbackPanel.className = "feedback-panel bad";
-      el.feedbackPanel.innerHTML = "Check these points:<ul>" + res.issues.map(i=>`<li>${i.hint}</li>`).join("") + "</ul>";
-      return;
-    }
-    state.lockedRows.push(row);
-    if (row.totalLegs === P.targetLegs) {
-      state.stage = "endgame";
-      el.endgame.hidden = false;
-    }
-    renderTable();
-    saveState();
-  }
+  window.syncPaddockManual = function(kind) {
+    const gIn = document.getElementById('inGoats');
+    const cIn = document.getElementById('inChickens');
+    let gVal = parseInt(gIn.value) || 0;
+    let cVal = parseInt(cIn.value) || 0;
 
-  function onFinal() {
-    var val = parseInt(qs("finalAnswer").value);
-    if (val === P.answer) {
-      el.endgame.hidden = true;
-      el.celebrate.hidden = false;
-      qs("celebrateTitle").innerText = "🎉 11 Chicken!";
-      qs("celebrateText").innerText = "Correct! 11 chicken and 9 goats make 58 legs.";
-    } else {
-      qs("endgameFeedback").hidden = false;
-      qs("endgameFeedback").innerText = "Not quite. Look at your winning row!";
+    if (gVal + cVal > 20) {
+      if (kind === 'goat') gIn.value = 20 - cVal;
+      else cIn.value = 20 - gVal;
     }
-  }
-
-  function init() {
-    el.paddock = qs("paddock"); el.liveCounts = qs("liveCounts"); el.tableBody = qs("tableBody");
-    el.feedbackPanel = qs("feedbackPanel"); el.endgame = qs("endgame"); el.celebrate = qs("celebrate");
     
-    var saved = localStorage.getItem(STORAGE_KEY);
-    if(saved) { var s = JSON.parse(saved); state.assign = s.assign; state.lockedRows = s.lockedRows; state.stage = s.stage; }
-
-    el.paddock.addEventListener("click", e => {
-      var btn = e.target.closest(".tile"); if(!btn || state.stage !== "guessing") return;
-      var i = btn.dataset.index;
-      var cycle = ["q", "goat", "chicken"];
-      state.assign[i] = cycle[(cycle.indexOf(state.assign[i]) + 1) % 3];
-      renderPaddock(); saveState();
-    });
-
-    qs("allGoatsBtn").onclick = () => { state.assign.fill("goat"); renderPaddock(); saveState(); };
-    qs("allChickensBtn").onclick = () => { state.assign.fill("chicken"); renderPaddock(); saveState(); };
-    qs("resetBtn").onclick = () => { if(confirm("Reset?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } };
-    qs("submitRowBtn").onclick = onSubmit;
-    qs("finalAnswerBtn").onclick = onFinal;
-    qs("playAgainBtn").onclick = () => { localStorage.removeItem(STORAGE_KEY); location.reload(); };
-
-    renderPaddock(); renderTable();
-    if(state.stage === "endgame") el.endgame.hidden = false;
+    const fG = parseInt(gIn.value) || 0;
+    const fC = parseInt(cIn.value) || 0;
+    state.assign = [...Array(fG).fill('goat'), ...Array(fC).fill('chicken'), ...Array(20 - (fG + fC)).fill('q')];
+    renderPaddock();
+    save();
   }
+
+  function submitRow() {
+    if (state.stage !== 'guessing') return;
+    let data;
+
+    if (state.demoMode) {
+      const g = parseInt(el.demoGoats.value);
+      const c = 20 - g;
+      const tL = (g * 4) + (c * 2);
+      data = { goats: g, chickens: c, legsA: g * 4, legsB: c * 2, totalAnimals: 20, totalLegs: tL, comment: tL == 58 ? 'Correct' : (tL > 58 ? 'High' : 'Low') };
+    } else {
+      const g = parseInt(document.getElementById('inGoats').value) || 0;
+      const c = parseInt(document.getElementById('inChickens').value) || 0;
+      if (g + c < 20) { alert("Assign all 20 animals!"); return; }
+      
+      const lA = parseInt(document.getElementById('inLegsA').value), lB = parseInt(document.getElementById('inLegsB').value);
+      const tA = parseInt(document.getElementById('inTotalAnimals').value), tL = parseInt(document.getElementById('inTotalLegs').value);
+      const chk = document.getElementById('inCheck').value, comm = document.getElementById('inComment').value;
+
+      if ([lA, lB, tA, tL].some(isNaN) || !chk || (chk==='cross' && !comm)) { alert("Fill all fields!"); return; }
+      if (lA !== g*4 || lB !== c*2 || tA !== 20 || tL !== (lA+lB)) { 
+        el.feedback.innerText = "Check your calculations!"; el.feedback.className = "feedback-panel bad"; el.feedback.classList.remove('hidden'); return; 
+      }
+      data = { goats: g, chickens: c, legsA: lA, legsB: lB, totalAnimals: tA, totalLegs: tL, comment: comm || 'Correct' };
+    }
+
+    state.lockedRows.push(data);
+    el.feedback.classList.add('hidden');
+    if (data.totalLegs === 58) state.stage = 'endgame';
+    renderTable();
+    checkEndgameVisibility();
+    save();
+  }
+
+  function checkEndgameVisibility() {
+    el.endgame.classList.toggle('hidden', state.stage !== 'endgame');
+  }
+
+  function checkFinal() {
+    const val = parseInt(document.getElementById('finalAnswer').value);
+    const fb = document.getElementById('endgameFeedback');
+    fb.classList.remove('hidden');
+    if (val === P.answer) {
+      state.stage = 'done'; el.endgame.classList.add('hidden'); el.celebrate.classList.remove('hidden');
+      document.getElementById('celebrateTitle').innerText = "Correct! 11 Chickens";
+      document.getElementById('celebrateText').innerText = "11 chickens (22 legs) and 9 goats (36 legs) make exactly 58 legs.";
+      save();
+    } else {
+      fb.innerText = "Not quite. Look at your winning row!"; fb.className = "feedback-panel bad";
+    }
+  }
+
+  function resetApp() {
+    if(confirm("Reset entire puzzle?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
+  }
+
   init();
 })();
 </script>
