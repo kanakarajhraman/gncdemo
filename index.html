@@ -21,6 +21,9 @@
   --cross-red: #c0392b;
   --cross-red-soft: #f9e5e2;
   --amber: #c98a2c;
+  /* UPDATED HIGHLIGHT COLORS FOR HIGHER CONTRAST */
+  --amber-light: #ffedc2; 
+  --amber-locked: #ffe08a; 
   --line: #e2ddcd;
   --radius: 12px;
   --font-display: 'Baloo 2', system-ui, sans-serif;
@@ -168,24 +171,50 @@ html, body {
 }
 
 /* ---------- table ---------- */
-.table-scroll { overflow-x: auto; border-radius: var(--radius); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.gnc-table { width: 100%; min-width: 1000px; border-collapse: collapse; background: var(--paper); }
+.table-scroll { 
+  overflow-x: auto; 
+  border-radius: var(--radius); 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+  border: 2px solid var(--line);
+}
+.gnc-table { 
+  width: 100%; 
+  min-width: 1000px; 
+  border-collapse: collapse; 
+  background: var(--paper); 
+}
+
+.gnc-table th, .gnc-table td {
+  border: 1.5px solid var(--line);
+  padding: 10px 4px;
+  text-align: center;
+}
+
 .gnc-table th {
   background: #efe9d8;
   color: var(--ink-soft);
   font-size: 22px; 
-  padding: 12px 5px;
   border-bottom: 3px solid var(--line);
 }
 .th-note { font-family: var(--font-mono); font-size: 22px; color: var(--amber); font-weight: 700; }
 
-.gnc-table td {
-  border-bottom: 1px solid var(--line);
-  padding: 10px 4px;
-  text-align: center;
-  font-size: 28px;
+.gnc-table td { font-size: 28px; }
+
+/* HIGHLIGHT COLUMNS 2, 4, 6 */
+.gnc-table th:nth-child(2), .gnc-table td:nth-child(2),
+.gnc-table th:nth-child(4), .gnc-table td:nth-child(4),
+.gnc-table th:nth-child(6), .gnc-table td:nth-child(6) {
+  background-color: var(--amber-light);
 }
+
 .gnc-table tr.locked td { font-family: var(--font-mono); background: #fbf8ef; }
+
+/* OVERRIDE HIGHLIGHT FOR LOCKED ROWS */
+.gnc-table tr.locked td:nth-child(2),
+.gnc-table tr.locked td:nth-child(4),
+.gnc-table tr.locked td:nth-child(6) {
+  background-color: var(--amber-locked);
+}
 
 .cell-input {
   width: 90px;
@@ -328,9 +357,8 @@ html, body {
 <script>
 (function () {
   const P = { totalAnimals: 20, targetLegs: 58, answer: 11 };
-  const STORAGE_KEY = "kathleensFarmState_v5";
+  const STORAGE_KEY = "kathleensFarmState_v7";
 
-  // --- REALISTIC ICONS ---
   const SVG_Q = `<svg viewBox="0 0 100 100"><rect x="5" y="5" width="90" height="90" rx="15" fill="#f4f1e8" stroke="#dcd9ce" stroke-width="2"/><path d="M50 70v-4m0-8c0-12 15-12 15-22 0-8-15-8-15 0" fill="none" stroke="#8d897e" stroke-width="8" stroke-linecap="round"/><circle cx="50" cy="74" r="5" fill="#8d897e"/></svg>`;
   
   const SVG_GOAT = `<svg viewBox="0 0 100 100">
@@ -417,7 +445,7 @@ html, body {
     
     document.getElementById('allGoatsBtn').onclick = () => fillPaddock('goat');
     document.getElementById('allChickensBtn').onclick = () => fillPaddock('chicken');
-    document.getElementById('resetBtn').onclick = () => { if(confirm("Reset?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } };
+    document.getElementById('resetBtn').onclick = () => { if(confirm("Reset everything?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } };
     
     el.manualBtn.onclick = submitRow;
     el.demoSubmitBtn.onclick = submitRow;
@@ -544,7 +572,7 @@ html, body {
     } else {
       const g = parseInt(document.getElementById('inGoats').value) || 0;
       const c = parseInt(document.getElementById('inChickens').value) || 0;
-      if (g + c < 20) { alert("Assign all 20 animals!"); return; }
+      if (g + c < 20) { alert("Assign all 20 animals first!"); return; }
       const lA = parseInt(document.getElementById('inLegsA').value), lB = parseInt(document.getElementById('inLegsB').value),
             tA = parseInt(document.getElementById('inTotalAnimals').value), tL = parseInt(document.getElementById('inTotalLegs').value),
             chk = document.getElementById('inCheck').value, comm = document.getElementById('inComment').value;
